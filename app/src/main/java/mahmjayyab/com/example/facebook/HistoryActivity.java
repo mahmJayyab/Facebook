@@ -30,8 +30,10 @@ public class HistoryActivity extends AppCompatActivity {
     HistoryAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
     ArrayList<Video> videos = new ArrayList();
+    ArrayList<Video> visibleVideos = new ArrayList<>();
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
+    int lastIndex;
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -53,15 +55,38 @@ public class HistoryActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        historyAdapter = new HistoryAdapter(videos, this);
+        historyAdapter = new HistoryAdapter(visibleVideos, this);
         mRecyclerView.setAdapter(historyAdapter);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = mLayoutManager.getItemCount();
+                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+                Log.d("asd", totalItemCount + ":" + lastVisibleItem);
+                if (totalItemCount - 1 == lastVisibleItem) {
+                    add10();
+                }
+            }
+        });
 
         for (Video video : VideoAdapter.hv) {
 
             videos.add(video);
 
         }
+        add10();
         if(!videos.isEmpty())
         progressBar.setVisibility(View.GONE);
+    }
+
+    public void add10() {
+        Log.d("asd", lastIndex + "::" + videos.size());
+        int max = Math.min(lastIndex +5 , videos.size());
+        for (int i = lastIndex; i < max; i++) {
+            visibleVideos.add(videos.get(i));
+        }
+        lastIndex += 5;
     }
 }
