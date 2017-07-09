@@ -8,4 +8,11 @@
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/action_settings"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_history"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="@string/action_settings"
+        app:showAsAction="always"/>
 </menu>

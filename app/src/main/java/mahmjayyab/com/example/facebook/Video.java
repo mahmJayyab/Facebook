@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class Video {
+    private String pageName = null;
     private String source = null;
     private String description = null;
     private String title = null;
@@ -16,7 +17,7 @@ public class Video {
     private String summary;
 
     public Video(String source, String description, String title,String id, String picture,
-                 String created_date, String summary){
+                 String created_date, String summary,String pageName){
         this.setSource(source);
         this.setDescription(description);
         this.setTitle(title);
@@ -24,6 +25,7 @@ public class Video {
         this.setPicture(picture);
         this.setCreated_date(created_date);
         this.setSummary(summary);
+        this.setPageName(pageName);
     }
 
     private String image;
@@ -90,5 +92,13 @@ public class Video {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
     }
 }

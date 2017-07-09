@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static BufferedReader reader;
-    public  static ArrayList<String> links = new ArrayList<>();
-    public  static ArrayList<String> allPages = new ArrayList<>();
-    public  static ArrayList<Boolean> checked = new ArrayList<>();
+    public static ArrayList<String> links = new ArrayList<>();
+    public static ArrayList<String> allPages = new ArrayList<>();
+    public static ArrayList<Boolean> checked = new ArrayList<>();
     public static FileOutputStream outputStream;
     public static File file;
     FileReader in;
@@ -63,44 +63,40 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cont = this.getBaseContext();
-         file = new File(getFilesDir(), "data.txt");
-        try  {
+        file = new File(getFilesDir(), "data.txt");
+        try {
             //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
             //outputStream.write("MEQBAS#true\najplusarabi#true\n".getBytes());
             //outputStream.close();
-        } catch(Exception ex)
-        {
-            Log.d("asd",ex.toString());
+        } catch (Exception ex) {
+            Log.d("asd", ex.toString());
         }
         //links.add("MEQBAS");
         //links.add("ajplusarabi");
-        try  {
+        try {
 
             //InputStream is = getResources().openRawResource(R.raw.data);
             reader = new BufferedReader(new FileReader(file));
             String link;
             Scanner s;
-            while((link = reader.readLine()) != null)
-            {
+            while ((link = reader.readLine()) != null) {
                 s = new Scanner(link).useDelimiter("#");
                 String item = s.next();
                 String temp = s.next();
-                Log.d("asd",item+"\t"+temp);
+                Log.d("asd", item + "\t" + temp);
                 allPages.add(item);
-                if(temp.equals("true")) {
+                if (temp.equals("true")) {
                     links.add(item);
                     checked.add(true);
-                }
-                else {
+                } else {
                     checked.add(false);
                 }
-                Log.d("asd",checked.get(0)+"");
+                Log.d("asd", checked.get(0) + "");
             }
             //reader.close();
-           // Log.d("asd",reader.readLine());
-        } catch (Exception ex)
-        {
-            Log.d("asd",ex.toString());
+            // Log.d("asd",reader.readLine());
+        } catch (Exception ex) {
+            Log.d("asd", ex.toString());
             links.add("MEQBAS");
         }
         initialize();
@@ -110,16 +106,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
-        Log.d("asd","startMethod");
+        Log.d("asd", "startMethod");
     }
 
-    public void add10(){
-        Log.d("asd",lastIndex+":"+videos.size());
-        int max = Math.min(lastIndex+10,videos.size());
-        for(int i=lastIndex;i<max;i++){
+    public void add10() {
+        Log.d("asd", lastIndex + ":" + videos.size());
+        int max = Math.min(lastIndex + 10, videos.size());
+        for (int i = lastIndex; i < max; i++) {
             visibleVideos.add(videos.get(i));
         }
         lastIndex += 10;
@@ -133,12 +128,9 @@ public class MainActivity extends AppCompatActivity
 
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                // AlertDFragment alertdFragment = new AlertDFragment();
-                //  alertdFragment.show(fm, "Alert Dialog Fragment");
-                Log.d("asd", cont + "");
-                Intent myIntent = new Intent(cont, HistoryActivity.class);
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                cont.startActivity(myIntent);
+                 AlertDFragment alertdFragment = new AlertDFragment();
+                alertdFragment.show(fm, "Alert Dialog Fragment");
+
             }
         });
 
@@ -167,32 +159,34 @@ public class MainActivity extends AppCompatActivity
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-                Log.d("asd",totalItemCount+":"+lastVisibleItem);
-                if(totalItemCount-1 == lastVisibleItem){
+                Log.d("asd", totalItemCount + ":" + lastVisibleItem);
+                if (totalItemCount - 1 == lastVisibleItem) {
                     add10();
                 }
             }
         });
     }
 
-    public void getVideos()
-    {
-        if(links.isEmpty()) return;
+    public void getVideos() {
+        if (links.isEmpty()) return;
         AccessToken token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
                 null, null, null, null, null);
         GraphRequestBatch batch = new GraphRequestBatch();
         for (String link : links) {
 
             batch.add(new GraphRequest(token,
-                    link+"/videos?fields=source,id,picture,created_time,likes.limit(0).summary(true),description,title"
+                    link + "/videos?fields=from,source,id,picture,created_time,likes.limit(0).summary(true),description,title"
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse response) {
                     Video video;
-                    String picture="",source="",title="",description="",id="",created_time="";
+                    String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
                     try {
-                       // Log.d("asd",response.toString());
-                        for (int i =0; i < response.getJSONObject().getJSONArray("data").length();i++) {
+                        JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
+                         pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
+
+                        // Log.d("asd",response.toString());
+                        for (int i = 1; i < response.getJSONObject().getJSONArray("data").length(); i++) {
                             JSONObject js = response.getJSONObject().getJSONArray("data").getJSONObject(i);
                             //picture=js.getJSONObject("thumbnails").getJSONArray("data").getJSONObject(0).getString("uri");
                             picture = (js.has("picture") && !js.isNull("picture")) ? js.getString("picture") : "";
@@ -203,15 +197,15 @@ public class MainActivity extends AppCompatActivity
                             created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
                             //String summary = js.getString("summary");
 
-                            video = new Video(source, description, title, id, picture, created_time, "");
+                            video = new Video(source, description, title, id, picture, created_time,"", pageName);
 
                             videos.add(video);
                         }
-                       // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
+                        // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 
 
                     } catch (Exception ex) {
-                        Log.d("asd",ex.toString());
+                        Log.d("asd", ex.toString());
                     }
                     new Handler().post(new Runnable() {
                         @Override
@@ -222,16 +216,18 @@ public class MainActivity extends AppCompatActivity
                     });
 
                 }
-            }));
+            })
+
+            );
+
         }
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
                 Collections.sort(videos, new Comparator<Video>() {
                     @Override
-                    public int compare(Video video2, Video video1)
-                    {
-                        return  video1.getCreated_date().compareTo(video2.getCreated_date());
+                    public int compare(Video video2, Video video1) {
+                        return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
                 });
                 //visibleVideos.addAll( videos);
@@ -264,49 +260,60 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Integer test = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                DialogSettings dS = new DialogSettings();
+                // Show Alert DialogFragment
+                dS.show(fm, "Alert Dialog Fragment");
+                break;
 
-        DialogSettings dS = new DialogSettings();
-        // Show Alert DialogFragment
-        dS.show(fm, "Alert Dialog Fragment");
+            case R.id.action_history:
 
+                Log.d("asd", cont + "");
+                Intent myIntent = new Intent(cont, HistoryActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent);
+                break;
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        @SuppressWarnings("StatementWithEmptyBody")
+        @Override
+        public boolean onNavigationItemSelected (MenuItem item){
+            // Handle navigation view item clicks here.
+            int id = item.getItemId();
 
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        if(!isClosed){
-            saveChanges();
-            isClosed = true;
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         }
-    }
 
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        if(!isClosed){
-            saveChanges();
-            isClosed = true;
+        @Override
+        public void onDestroy ()
+        {
+            super.onDestroy();
+            if (!isClosed) {
+                saveChanges();
+                isClosed = true;
+            }
         }
-    }
 
-    public void saveChanges(){
-        Log.d("asd","destriy");
+        @Override
+        public void onStop ()
+        {
+            super.onStop();
+            if (!isClosed) {
+                saveChanges();
+                isClosed = true;
+            }
+        }
+
+    public void saveChanges() {
+        Log.d("asd", "destriy");
         //if(isClosed) return;
         try {  // Do something else
             outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
@@ -319,9 +326,8 @@ public class MainActivity extends AppCompatActivity
             outputStream.close();
             links.clear();
             allPages.clear();
-        }catch (Exception ex)
-        {
-            Log.d("asd",ex.toString());
+        } catch (Exception ex) {
+            Log.d("asd", ex.toString());
         }
         //isClosed = true;
     }
