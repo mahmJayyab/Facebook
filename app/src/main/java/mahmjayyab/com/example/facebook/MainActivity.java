@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<String> allPages = new ArrayList<>();
     public static ArrayList<Boolean> checked = new ArrayList<>();
     public static FileOutputStream outputStream;
-    public static File file;
+    public static File Pages_file;
+    public static File history_videos_file;
     FileReader in;
     VideoAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
@@ -63,7 +64,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cont = this.getBaseContext();
-        file = new File(getFilesDir(), "data.txt");
+        Pages_file = new File(getFilesDir(), "data.txt");
+        //history_videos_file = new File(getFilesDir(), "history.txt");
+
         try {
             //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
             //outputStream.write("MEQBAS#true\najplusarabi#true\n".getBytes());
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         try {
 
             //InputStream is = getResources().openRawResource(R.raw.data);
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(Pages_file));
             String link;
             Scanner s;
             while ((link = reader.readLine()) != null) {
@@ -271,6 +274,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_history:
 
                 Log.d("asd", cont + "");
+
                 Intent myIntent = new Intent(cont, HistoryActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 cont.startActivity(myIntent);
@@ -326,6 +330,14 @@ public class MainActivity extends AppCompatActivity
             outputStream.close();
             links.clear();
             allPages.clear();
+            /*outputStream = openFileOutput("history.txt", Context.MODE_PRIVATE);
+            for (Video v : VideoAdapter.hv)
+            {
+                Log.d("add",v.toString());
+                outputStream.write("".getBytes());
+            }
+            outputStream.close();*/
+            //VideoAdapter.hv.clear();
         } catch (Exception ex) {
             Log.d("asd", ex.toString());
         }

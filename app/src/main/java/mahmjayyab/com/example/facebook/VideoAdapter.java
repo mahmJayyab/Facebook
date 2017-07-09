@@ -3,6 +3,7 @@ package mahmjayyab.com.example.facebook;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +15,27 @@ import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Scanner;
 
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
 
 
+    public static ArrayList<Video> historyVideos;
+    public static LinkedList<Video> hv = new LinkedList<>();
+    static List<ViewHolder> holders;
     List<Video> videos;
     Context mContext;
     int index = 0;
-    public static ArrayList<Video> historyVideos;
-    public static LinkedList<Video> hv = new LinkedList<>();
+    boolean firstTime;
+
     public VideoAdapter(List<Video> videos, Context mContext) {
         this.videos = videos;
         this.mContext = mContext;
@@ -41,12 +49,32 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.video_item, parent, false);
         //view.setId(R.id.videoView);
+
+        try {
+            File history_videos_file = new File(mContext.getFilesDir(), "history.txt");
+            FileOutputStream out = new FileOutputStream(history_videos_file);
+            //out.write(("الاثاث الذكي|مقبس - Meqbas"+"|https://video.xx.fbcdn.net/v/t43.1792-2/19874580_252527078569826_5361061552772349952_n.mp4?efg=eyJybHIiOjE1MDAsInJsYSI6MTAyNCwidmVuY29kZV90YWciOiJzdmVfaGQifQ%3D%3D&rl=1500&vabr=437&oh=ec3a33ff309d041b4864198fed069a4e&oe=596447AD|https://fb-s-a-a.akamaihd.net/h-ak-fbx/v/t15.0-10/p128x128/19983168_1906094842994908_5479280862602199040_n.jpg?oh=078916f9293398e5d58ec06487f40444&oe=5A04C35D&__gda__=1510498972_adcaaf0091708a8db21e620ecc63760a").getBytes());
+            BufferedReader reader = new BufferedReader(new FileReader(MainActivity.history_videos_file));
+            String link;
+            Scanner s;
+            Log.d("add", reader.readLine());
+            while ((link = reader.readLine()) != null) {
+                s = new Scanner(link).useDelimiter("|");
+                String pName = s.next();
+                String pTitle = s.next();
+                String pSource = s.next();
+                String pic = s.next();
+                Video video = new Video(pSource, "", pTitle, "", pic, "", "", pName);
+                hv.addFirst(video);
+
+                Log.d("add", "2" + video.toString());
+            }
+        } catch (Exception ex) {
+            Log.d("add", ex.toString());
+        }
         historyVideos = new ArrayList<>();
         return new ViewHolder(view);
     }
-
-    static List<ViewHolder> holders;
-    boolean firstTime;
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
