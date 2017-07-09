@@ -2,9 +2,17 @@ package mahmjayyab.com.example.facebook;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 public class DialogSettings extends android.support.v4.app.DialogFragment {
     boolean[] checkedItems;
@@ -27,7 +35,6 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
                     for(int i =0; i< checkedItems.length; i++){
                         MainActivity.checked.set(i,checkedItems[i]);
                         Log.d("asd",MainActivity.checked.get(i)+"");
-                        Log.d("asd", "okaymashi");
                     }
                     }
                 })
