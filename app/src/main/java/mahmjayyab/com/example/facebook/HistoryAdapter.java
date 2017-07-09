@@ -23,6 +23,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     List<Video> videos;
     Context mContext;
+    public static String id;
 
     public HistoryAdapter(List<Video> videos, Context mContext) {
         this.videos = videos;
@@ -37,6 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.history_item, parent, false);
         //view.setId(R.id.videoView);
+
         return new ViewHolder(view);
     }
 
@@ -48,6 +50,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         final Video video = videos.get(position);
         holder.mTitleTextView.setText(video.getTitle());
         holder.pageName.setText(video.getPageName());
+        id = video.getId();
         Picasso.with(mContext).load(video.getPicture()).into(holder.imageView);
 
 
@@ -71,6 +74,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTitleTextView;
         public TextView pageName;
+        public double id;
         public ImageView imageView;
         public View view;
         //public VideoView videoView;

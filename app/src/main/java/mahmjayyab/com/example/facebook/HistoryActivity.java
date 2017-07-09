@@ -2,6 +2,8 @@ package mahmjayyab.com.example.facebook;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,8 @@ public class HistoryActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     int lastIndex;
+    ArrayList<String> existIds = new ArrayList<>();
+    FragmentManager fm = getSupportFragmentManager();
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -48,6 +52,21 @@ public class HistoryActivity extends AppCompatActivity {
         //drawer.setDrawerListener(toggle);
        // toggle.syncState();
 
+        //Clear history
+        FloatingActionButton clear = (FloatingActionButton) findViewById(R.id.clear);
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                visibleVideos.clear();
+                videos.clear();
+                VideoAdapter.hv.clear();
+                mRecyclerView.setAdapter(historyAdapter);
+
+            }
+        });
+
+
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -55,10 +74,11 @@ public class HistoryActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        historyAdapter = new HistoryAdapter(visibleVideos, this);
+        //edit her visble video
+        historyAdapter = new HistoryAdapter(videos, this);
         mRecyclerView.setAdapter(historyAdapter);
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -69,24 +89,34 @@ public class HistoryActivity extends AppCompatActivity {
                     add10();
                 }
             }
-        });
+        });*/
 
+        //When watch video more than one time >> up to the history one time
+        existIds.add(0,"non");
         for (Video video : VideoAdapter.hv) {
-
-            videos.add(video);
+            boolean cheak = true;
+            for (String id : existIds) {
+                if(video.getId().equals(id) )
+                    cheak = false;
+            }
+            if(cheak){
+                videos.add(video);
+            }
+            existIds.add(video.getId());
 
         }
-        add10();
+
+        //add10();
         if(!videos.isEmpty())
         progressBar.setVisibility(View.GONE);
     }
 
-    public void add10() {
+   /* public void add10() {
         Log.d("asd", lastIndex + "::" + videos.size());
-        int max = Math.min(lastIndex +5 , videos.size());
+        int max = Math.min(lastIndex +15 , videos.size());
         for (int i = lastIndex; i < max; i++) {
             visibleVideos.add(videos.get(i));
         }
-        lastIndex += 5;
-    }
+        lastIndex += 15;
+    }*/
 }
