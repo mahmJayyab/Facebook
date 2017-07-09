@@ -35,6 +35,9 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
                     for(int i =0; i< checkedItems.length; i++){
                         MainActivity.checked.set(i,checkedItems[i]);
                         Log.d("asd",MainActivity.checked.get(i)+"");
+                        Log.d("asd","Edit");
+                        Log.d("asd","wwwwww");
+                        Log.d("asd","wqe");
                     }
                     }
                 })
