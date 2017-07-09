@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FB</string>
+    <string name="appId">128841827707620</string>
+    <string name="accesstoken">128841827707620|dbeee0ba85811c7eb8ed6b208075f9a2</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
