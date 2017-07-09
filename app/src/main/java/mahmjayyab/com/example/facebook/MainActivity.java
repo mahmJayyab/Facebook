@@ -1,25 +1,23 @@
 package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
@@ -28,15 +26,12 @@ import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,31 +40,33 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    FileReader in;
     public static BufferedReader reader;
-    VideoAdapter mAdapter;
-    LinearLayoutManager mLayoutManager;
-    ArrayList<Video> videos = new ArrayList();
     public  static ArrayList<String> links = new ArrayList<>();
     public  static ArrayList<String> allPages = new ArrayList<>();
     public  static ArrayList<Boolean> checked = new ArrayList<>();
+    public static FileOutputStream outputStream;
+    public static File file;
+    FileReader in;
+    VideoAdapter mAdapter;
+    LinearLayoutManager mLayoutManager;
+    ArrayList<Video> videos = new ArrayList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
     int lastIndex;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     FragmentManager fm = getSupportFragmentManager();
-
-    public static FileOutputStream outputStream;
-    public static File file;
+    Context cont;
+    boolean isClosed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cont = this.getBaseContext();
          file = new File(getFilesDir(), "data.txt");
         try  {
-           // outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
-           // outputStream.write("MEQBAS#true\najplusarabi#true\n".getBytes());
+            //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
+            //outputStream.write("MEQBAS#true\najplusarabi#true\n".getBytes());
             //outputStream.close();
         } catch(Exception ex)
         {
@@ -111,12 +108,14 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
     @Override
     public void onStart()
     {
         super.onStart();
         Log.d("asd","startMethod");
     }
+
     public void add10(){
         Log.d("asd",lastIndex+":"+videos.size());
         int max = Math.min(lastIndex+10,videos.size());
@@ -125,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         }
         lastIndex += 10;
     }
+
     public void initialize() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -133,8 +133,12 @@ public class MainActivity extends AppCompatActivity
 
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
-                AlertDFragment alertdFragment = new AlertDFragment();
-                alertdFragment.show(fm, "Alert Dialog Fragment");
+                // AlertDFragment alertdFragment = new AlertDFragment();
+                //  alertdFragment.show(fm, "Alert Dialog Fragment");
+                Log.d("asd", cont + "");
+                Intent myIntent = new Intent(cont, HistoryActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent);
             }
         });
 
@@ -290,6 +294,7 @@ public class MainActivity extends AppCompatActivity
             isClosed = true;
         }
     }
+
     @Override
     public void onStop()
     {
@@ -299,7 +304,6 @@ public class MainActivity extends AppCompatActivity
             isClosed = true;
         }
     }
-    boolean isClosed = false;
 
     public void saveChanges(){
         Log.d("asd","destriy");

@@ -31,6 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".VideoPlayer" />
+        <activity android:name=".HistoryActivity" />
         <activity android:name=".DFragment" />
         <activity android:name=".AlertDFragment"></activity>
     </application>
