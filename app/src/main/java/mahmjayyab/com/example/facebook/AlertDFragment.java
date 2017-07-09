@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.widget.EditText;
 
 public class AlertDFragment extends DialogFragment {
@@ -35,9 +34,15 @@ public class AlertDFragment extends DialogFragment {
                         // Do something else
                         if(link.startsWith("https://www.facebook.com")||link.startsWith("https://m.facebook.com")||link.startsWith("www.facebook.com")){
                             String p = link.substring(link.indexOf(".com/")+5);
-                            String temp = p.substring(p.indexOf("/"));
-                            pageName = p.replaceAll(temp,"");
-                            MainActivity.links.add(pageName);
+                            String temp = "";
+                            if (p.indexOf("/") != -1) {
+                                temp = p.substring(p.indexOf("/"));
+                            } else {
+                                temp = p;
+                            }
+                            pageName = temp;
+                            MainActivity.allPages.add(pageName);
+                            MainActivity.checked.add(true);
                         }
 
                     }
