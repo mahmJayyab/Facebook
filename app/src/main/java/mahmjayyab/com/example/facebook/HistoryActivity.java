@@ -1,26 +1,13 @@
 package mahmjayyab.com.example.facebook;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphRequestBatch;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -62,6 +49,8 @@ public class HistoryActivity extends AppCompatActivity {
                 videos.clear();
                 VideoAdapter.hv.clear();
                 mRecyclerView.setAdapter(historyAdapter);
+
+                // I did it haha
 
             }
         });
