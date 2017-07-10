@@ -1,5 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
+import java.util.List;
+
 /**
  * Created by mahmo on 7/4/2017.
  */
@@ -13,7 +15,6 @@ public class Video {
     private String picture = null;
     private String created_date = null;
     private String summary;
-    private String image;
 
     public Video(String source, String description, String title,String id, String picture,
                  String created_date, String summary,String pageName){
@@ -26,6 +27,8 @@ public class Video {
         this.setSummary(summary);
         this.setPageName(pageName);
     }
+
+    private String image;
 
     public String getSource() {
         return source;
@@ -97,10 +100,5 @@ public class Video {
 
     public void setPageName(String pageName) {
         this.pageName = pageName;
-    }
-
-    @Override
-    public String toString() {
-        return this.getPageName() + "|" + this.getTitle() + "|" + this.getSource() + "|" + this.getPicture();
     }
 }
