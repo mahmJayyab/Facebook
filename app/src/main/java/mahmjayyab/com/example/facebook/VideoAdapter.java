@@ -2,7 +2,9 @@ package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     Context mContext;
     int index = 0;
     public static ArrayList<Video> historyVideos;
-    public static LinkedList<Video> hv = new LinkedList<>();
+   // public static LinkedList<Video> hv = new LinkedList<>();
     public VideoAdapter(List<Video> videos, Context mContext) {
         this.videos = videos;
         this.mContext = mContext;
@@ -42,6 +44,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 .inflate(R.layout.video_item, parent, false);
         //view.setId(R.id.videoView);
         historyVideos = new ArrayList<>();
+
         return new ViewHolder(view);
     }
 
@@ -67,7 +70,29 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             public void onClick(View v) {
                 //TODO:ADD your Intent;
                 VideoPlayer.video = video;
-                hv.addFirst(video);
+                boolean done = true;
+                Log.d("aa",HistoryActivity.videos+" Addpter");
+                for (Video vv: HistoryActivity.videos) {
+                    if(vv.getSource().equals(video.getSource())){
+                        Log.d("aaa","equal");
+                        done = false;
+                        int index =HistoryActivity.videos.indexOf(video);
+                        HistoryActivity.videos.addFirst(video);
+                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
+                        Video vs = HistoryActivity.videos.remove(index+1);
+                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
+                        //Cursor c = MainActivity.myDb.getData(DatabaseHelper.TABLE_HISTORY,""+(index));
+                        //Log.d("aa",c.getString(1));
+                        int x= MainActivity.myDb.deleteData((index+1)+"");
+                        Log.d("aa",vs.getId()+"    " + HistoryActivity.videos.get(index+1).getTitle());
+                        MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
+                        break;
+                    }
+                }
+                if(done){
+                    HistoryActivity.videos.addFirst(video);
+                    MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
+                }
                 //historyVideos.add(0,video);
                 /*for(int i= 0;i < historyVideos.size();i++){
                     historyVideos.add(i+1,historyVideos.get(i));

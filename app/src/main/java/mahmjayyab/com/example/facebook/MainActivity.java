@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb=new DatabaseHelper(this);
+
         //myDb.insertData("MEQBAS","true");
         cont = this.getBaseContext();
         file = new File(getFilesDir(), "data.txt");
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
             links.add("MEQBAS");
         }*/
 
-        Cursor res = myDb.getAllData();
+        Cursor res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         if(res.getCount() == 0) {
             // show message
             myDb.insertData("MEQBAS","true");
@@ -129,8 +130,22 @@ public class MainActivity extends AppCompatActivity
                 checked.add(false);
             }
         }
+
         initialize();
         getVideos();
+        Cursor res1 =MainActivity.myDb.getAllData(DatabaseHelper.TABLE_HISTORY);
+        while (res1.moveToNext()) {
+            String pageName = res1.getString(1);
+            String title = res1.getString(2);
+            String source = res1.getString(3);
+            String picture = res1.getString(4);
+            Log.d("asd", pageName + "\t" + title);
+            Video video = new Video(pageName,title,source,picture);
+            HistoryActivity.videos.addFirst(video);
+            Log.d("aa",HistoryActivity.videos+" Main");
+            Log.d("aa",video.getPageName()+"556565");
+        }
+
 
 
     }
@@ -322,16 +337,14 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-       /* @Override
+        @Override
         public void onDestroy ()
         {
+            myDb.close();
             super.onDestroy();
-            if (!isClosed) {
-                saveChanges();
-                isClosed = true;
-            }
-        }
 
+        }
+/*
         @Override
         public void onStop ()
         {

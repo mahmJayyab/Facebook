@@ -27,6 +27,16 @@ public class Video {
         this.setSummary(summary);
         this.setPageName(pageName);
     }
+    public Video(String pageName, String title, String source, String picture ){
+        this.setSource(source);
+        //this.setDescription(description);
+        this.setTitle(title);
+        //this.setId(id);
+        this.setPicture(picture);
+        //this.setCreated_date(created_date);
+       // this.setSummary(summary);
+        this.setPageName(pageName);
+    }
 
     private String image;
 

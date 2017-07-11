@@ -12,9 +12,14 @@
     public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "FacebookVideos.db";
     public static final String TABLE_NAME = "Pages_table";
+    public static final String TABLE_HISTORY = "History_table";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "PAGENAME";
     public static final String COL_3 = "CHEACK";
+    public static final String COLL_2 = "PAGENAME";
+    public static final String COLL_3 = "TITLE";
+    public static final String COLL_4 = "SOURCE";
+    public static final String COLL_5 = "PICTURE";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -23,11 +28,14 @@
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT)");
+        db.execSQL("create table " + TABLE_HISTORY +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT)");
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_HISTORY);
         onCreate(db);
     }
 
@@ -69,13 +77,41 @@
             return true;
         }
     }
+        public boolean insertData(String pagename,String title,String source,String picture) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+             //contentValues.put(COL_1,id);
+            contentValues.put(COLL_2,pagename);
+            contentValues.put(COLL_3,title);
+            contentValues.put(COLL_4,source);
+            contentValues.put(COLL_5,picture);
+            long result = db.insert(TABLE_HISTORY,null ,contentValues);
+            if(result == -1)
+            {
+                Log.d("aa","Faild");
+                return false;
+            }
+            else
+            {
+                Log.d("aa","Suc");
+
+                return true;
+            }
+        }
 
 
-    public Cursor getAllData() {
+    public Cursor getAllData(String table) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+TABLE_NAME,null);
+        Cursor res = db.rawQuery("select * from "+table,null);
         return res;
     }
+
+        /*public Cursor getData(String table,String Id) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor res = db.rawQuery("select * from "+table + " where ID = " + Id,null);
+            return res;
+        }*/
+
 
     public boolean updateData(String pagename,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -96,8 +132,17 @@
         return true;
     }*/
 
-    public Integer deleteData (String id) {
+   /* public Integer deleteData (String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
-    }
+    }*/
+        public Integer deleteData (String id) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            return db.delete(TABLE_HISTORY, "ID = ?",new String[] {id});
+
+        }
+        public void deleteDataAll () {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("delete from "+TABLE_HISTORY);
+        }
 }

@@ -1,15 +1,18 @@
 package mahmjayyab.com.example.facebook;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by mahmo on 7/9/2017.
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 public class HistoryActivity extends AppCompatActivity {
     HistoryAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
-    ArrayList<Video> videos = new ArrayList();
+    public static LinkedList<Video> videos = new LinkedList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
@@ -47,7 +50,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                 visibleVideos.clear();
                 videos.clear();
-                VideoAdapter.hv.clear();
+               // VideoAdapter.hv.clear();
+                MainActivity.myDb.deleteDataAll();
                 mRecyclerView.setAdapter(historyAdapter);
 
                 // I did it haha
@@ -82,18 +86,15 @@ public class HistoryActivity extends AppCompatActivity {
 
         //When watch video more than one time >> up to the history one time
         existIds.add(0,"non");
-        for (Video video : VideoAdapter.hv) {
-            boolean cheak = true;
-            for (String id : existIds) {
-                if(video.getId().equals(id) )
-                    cheak = false;
-            }
-            if(cheak){
-                videos.add(video);
-            }
-            existIds.add(video.getId());
-
+        if(videos.isEmpty()) {
+            Log.d("asd","NullHis");
+            progressBar.setVisibility(View.GONE);
         }
+       /* for (Video video : VideoAdapter.hv) {
+
+                videos.add(video);
+            }*/
+           // existIds.add(video.getId());
 
         //add10();
         if(!videos.isEmpty())
