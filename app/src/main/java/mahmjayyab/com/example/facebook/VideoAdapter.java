@@ -2,7 +2,6 @@ package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.widget.VideoView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -25,10 +23,13 @@ import java.util.List;
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
 
 
+    public static ArrayList<Video> historyVideos;
+    static List<ViewHolder> holders;
     List<Video> videos;
     Context mContext;
     int index = 0;
-    public static ArrayList<Video> historyVideos;
+    boolean firstTime;
+
    // public static LinkedList<Video> hv = new LinkedList<>();
     public VideoAdapter(List<Video> videos, Context mContext) {
         this.videos = videos;
@@ -47,9 +48,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
         return new ViewHolder(view);
     }
-
-    static List<ViewHolder> holders;
-    boolean firstTime;
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -72,6 +70,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 VideoPlayer.video = video;
                 boolean done = true;
                 Log.d("aa",HistoryActivity.videos+" Addpter");
+                /*Cursor c = MainActivity.myDb.getData(DatabaseHelper.TABLE_HISTORY,video.getTitle());
+                if(c.getCount() == 0) {
+                    Log.d("aa","Exicteddd");
+                }*/
+                MainActivity.myDb.deleteData(video.getTitle());
+                MainActivity.myDb.insertData(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture());
+
+                /*HistoryActivity.videos.addFirst(video);
                 for (Video vv: HistoryActivity.videos) {
                     if(vv.getSource().equals(video.getSource())){
                         Log.d("aaa","equal");
@@ -80,11 +86,11 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                         HistoryActivity.videos.addFirst(video);
                         Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
                         Video vs = HistoryActivity.videos.remove(index+1);
-                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
+//                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
                         //Cursor c = MainActivity.myDb.getData(DatabaseHelper.TABLE_HISTORY,""+(index));
                         //Log.d("aa",c.getString(1));
-                        int x= MainActivity.myDb.deleteData((index+1)+"");
-                        Log.d("aa",vs.getId()+"    " + HistoryActivity.videos.get(index+1).getTitle());
+                        //int x= MainActivity.myDb.deleteData((index+1)+"");
+                        //Log.d("aa",vs.getId()+"    " + HistoryActivity.videos.get(index+1).getTitle());
                         MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
                         break;
                     }
@@ -92,7 +98,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 if(done){
                     HistoryActivity.videos.addFirst(video);
                     MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
-                }
+                }*/
                 //historyVideos.add(0,video);
                 /*for(int i= 0;i < historyVideos.size();i++){
                     historyVideos.add(i+1,historyVideos.get(i));

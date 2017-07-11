@@ -19,9 +19,9 @@ import java.util.LinkedList;
  */
 
 public class HistoryActivity extends AppCompatActivity {
+    public static LinkedList<Video> videos = new LinkedList();
     HistoryAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
-    public static LinkedList<Video> videos = new LinkedList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
@@ -32,6 +32,19 @@ public class HistoryActivity extends AppCompatActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_history);
+        videos.clear();
+        Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_HISTORY);
+        while (res1.moveToNext()) {
+            String pageName = res1.getString(1);
+            String title = res1.getString(2);
+            String source = res1.getString(3);
+            String picture = res1.getString(4);
+            Log.d("asd", pageName + "\t" + title);
+            Video video = new Video(pageName, title, source, picture);
+            videos.addFirst(video);
+            Log.d("aa", videos + " Main");
+            Log.d("aa", video.getPageName() + "556565");
+        }
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
        // setSupportActionBar(toolbar);

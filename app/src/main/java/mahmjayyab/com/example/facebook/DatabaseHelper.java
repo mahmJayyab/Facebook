@@ -106,11 +106,12 @@
         return res;
     }
 
-        /*public Cursor getData(String table,String Id) {
+        public Cursor getData(String table, String title) {
             SQLiteDatabase db = this.getWritableDatabase();
-            Cursor res = db.rawQuery("select * from "+table + " where ID = " + Id,null);
+            Cursor res = db.rawQuery("select * from " + table + " where TITLE = ?", new String[]{title}, null);
+
             return res;
-        }*/
+        }
 
 
     public boolean updateData(String pagename,String cheack) {
@@ -136,9 +137,10 @@
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
     }*/
-        public Integer deleteData (String id) {
+   public Integer deleteData(String title) {
             SQLiteDatabase db = this.getWritableDatabase();
-            return db.delete(TABLE_HISTORY, "ID = ?",new String[] {id});
+       // db.e
+       return db.delete(TABLE_HISTORY, "TITLE = ?", new String[]{title});
 
         }
         public void deleteDataAll () {
