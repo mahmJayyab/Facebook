@@ -13,6 +13,7 @@
     public static final String DATABASE_NAME = "FacebookVideos.db";
     public static final String TABLE_NAME = "Pages_table";
     public static final String TABLE_HISTORY = "History_table";
+        public static final String TABLE_FAV = "Favourite_table";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "PAGENAME";
     public static final String COL_3 = "CHEACK";
@@ -20,6 +21,8 @@
     public static final String COLL_3 = "TITLE";
     public static final String COLL_4 = "SOURCE";
     public static final String COLL_5 = "PICTURE";
+        public static final String COLL_6 = "FAV";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -29,6 +32,7 @@
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT)");
         db.execSQL("create table " + TABLE_HISTORY +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT)");
+        db.execSQL("create table " + TABLE_FAV + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT,FAV TEXT)");
 
     }
 
@@ -36,6 +40,7 @@
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_HISTORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAV);
         onCreate(db);
     }
 
@@ -94,6 +99,26 @@
             else
             {
                 Log.d("aa","Suc");
+
+                return true;
+            }
+        }
+
+        public boolean insertData(String pagename, String title, String source, String picture, String fav) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            //contentValues.put(COL_1,id);
+            contentValues.put(COLL_2, pagename);
+            contentValues.put(COLL_3, title);
+            contentValues.put(COLL_4, source);
+            contentValues.put(COLL_5, picture);
+            contentValues.put(COLL_6, fav);
+            long result = db.insert(TABLE_FAV, null, contentValues);
+            if (result == -1) {
+                Log.d("aa", "Faild");
+                return false;
+            } else {
+                Log.d("aa", "Suc");
 
                 return true;
             }
