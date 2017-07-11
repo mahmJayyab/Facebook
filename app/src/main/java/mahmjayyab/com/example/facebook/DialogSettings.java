@@ -16,7 +16,10 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
         checkedItems = new boolean[size];
         items = new String[size];
         Log.d("asd",size+"");
-        MainActivity.allPages.toArray(items);
+       // MainActivity.allPages.toArray(items);
+        for(int i=0; i< size; i++){
+            items[i] = MainActivity.allPages.get(i);
+        }
         for (int i =0;i<size;i++) checkedItems[i] = MainActivity.checked.get(i);
         //MainActivity.checked.toArray(checkedItems);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -27,10 +30,12 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
                     for(int i =0; i< checkedItems.length; i++){
                         MainActivity.checked.set(i,checkedItems[i]);
                         Log.d("asd",MainActivity.checked.get(i)+"");
-                        // I add comment
-                        // ok mashi
-                        //jyab
+                        if(checkedItems[i])
+                            MainActivity.myDb.updateData(items[i],"true");
+                        else
+                            MainActivity.myDb.updateData(items[i],"false");
                     }
+
                     }
                 })
 

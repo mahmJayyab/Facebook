@@ -2,6 +2,7 @@ package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -58,10 +59,14 @@ public class MainActivity extends AppCompatActivity
     Context cont;
     boolean isClosed = false;
 
+    public static DatabaseHelper myDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myDb=new DatabaseHelper(this);
+        //myDb.insertData("MEQBAS","true");
         cont = this.getBaseContext();
         file = new File(getFilesDir(), "data.txt");
         try {
@@ -73,13 +78,19 @@ public class MainActivity extends AppCompatActivity
         }
         //links.add("MEQBAS");
         //links.add("ajplusarabi");
-        try {
+       /* try {
 
             //InputStream is = getResources().openRawResource(R.raw.data);
             reader = new BufferedReader(new FileReader(file));
             String link;
             Scanner s;
+            //new edit to fix >> when start the programe the file is null
+            if(myDb.getAllData()==null){
+                //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
+                //outputStream.write("MEQBAS#true\n".getBytes());
+            }
             while ((link = reader.readLine()) != null) {
+                Log.d("asd","NotNull");
                 s = new Scanner(link).useDelimiter("#");
                 String item = s.next();
                 String temp = s.next();
@@ -91,13 +102,32 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     checked.add(false);
                 }
-                Log.d("asd", checked.get(0) + "");
             }
             //reader.close();
             // Log.d("asd",reader.readLine());
         } catch (Exception ex) {
             Log.d("asd", ex.toString());
             links.add("MEQBAS");
+        }*/
+
+        Cursor res = myDb.getAllData();
+        if(res.getCount() == 0) {
+            // show message
+            myDb.insertData("MEQBAS","true");
+            myDb.insertData("ajplusarabi","true");
+            Log.d("asd","Null");
+        }
+        while (res.moveToNext()) {
+            String item = res.getString(1);
+            String temp = res.getString(2);
+            Log.d("asd", item + "\t" + temp);
+            allPages.add(item);
+            if (temp.equals("true")) {
+                links.add(item);
+                checked.add(true);
+            } else {
+                checked.add(false);
+            }
         }
         initialize();
         getVideos();
@@ -292,7 +322,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-        @Override
+       /* @Override
         public void onDestroy ()
         {
             super.onDestroy();
@@ -330,6 +360,6 @@ public class MainActivity extends AppCompatActivity
             Log.d("asd", ex.toString());
         }
         //isClosed = true;
-    }
+    }*/
 
 }
