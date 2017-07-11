@@ -65,52 +65,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        links.clear();
+        allPages.clear();
+        checked.clear();
+        cont =this;
+        //creat database
         myDb=new DatabaseHelper(this);
-
-        //myDb.insertData("MEQBAS","true");
-        cont = this.getBaseContext();
-        file = new File(getFilesDir(), "data.txt");
-        try {
-            //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
-            //outputStream.write("MEQBAS#true\najplusarabi#true\n".getBytes());
-            //outputStream.close();
-        } catch (Exception ex) {
-            Log.d("asd", ex.toString());
-        }
-        //links.add("MEQBAS");
-        //links.add("ajplusarabi");
-       /* try {
-
-            //InputStream is = getResources().openRawResource(R.raw.data);
-            reader = new BufferedReader(new FileReader(file));
-            String link;
-            Scanner s;
-            //new edit to fix >> when start the programe the file is null
-            if(myDb.getAllData()==null){
-                //outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
-                //outputStream.write("MEQBAS#true\n".getBytes());
-            }
-            while ((link = reader.readLine()) != null) {
-                Log.d("asd","NotNull");
-                s = new Scanner(link).useDelimiter("#");
-                String item = s.next();
-                String temp = s.next();
-                Log.d("asd", item + "\t" + temp);
-                allPages.add(item);
-                if (temp.equals("true")) {
-                    links.add(item);
-                    checked.add(true);
-                } else {
-                    checked.add(false);
-                }
-            }
-            //reader.close();
-            // Log.d("asd",reader.readLine());
-        } catch (Exception ex) {
-            Log.d("asd", ex.toString());
-            links.add("MEQBAS");
-        }*/
-
+        //creat cursor to read from database
         Cursor res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         if(res.getCount() == 0) {
             // show message
@@ -320,6 +282,13 @@ public class MainActivity extends AppCompatActivity
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 cont.startActivity(myIntent);
                 break;
+            case R.id.action_favorite:
+
+                Log.d("asd", cont + "");
+                Intent myIntent1 = new Intent(cont, FavoriteActivity.class);
+                myIntent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent1);
+                break;
 
         }
         return super.onOptionsItemSelected(item);
@@ -337,42 +306,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-        @Override
+       /* @Override
         public void onDestroy ()
         {
             myDb.close();
             super.onDestroy();
 
         }
-/*
+
         @Override
         public void onStop ()
         {
+            myDb.close();
             super.onStop();
-            if (!isClosed) {
-                saveChanges();
-                isClosed = true;
-            }
-        }
-
-    public void saveChanges() {
-        Log.d("asd", "destriy");
-        //if(isClosed) return;
-        try {  // Do something else
-            outputStream = openFileOutput("data.txt", Context.MODE_PRIVATE);
-            outputStream.write("".getBytes());
-            for (int i = 0; i < allPages.size(); i++) {
-                outputStream.write((allPages.get(i) + "#" + checked.get(i)
-                        + "\n").getBytes());
-                Log.d("asd", allPages.get(i) + "#" + checked.get(i) + "\n");
-            }
-            outputStream.close();
-            links.clear();
-            allPages.clear();
-        } catch (Exception ex) {
-            Log.d("asd", ex.toString());
-        }
-        //isClosed = true;
-    }*/
-
+        }*/
 }

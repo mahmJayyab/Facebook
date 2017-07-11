@@ -13,7 +13,7 @@
     public static final String DATABASE_NAME = "FacebookVideos.db";
     public static final String TABLE_NAME = "Pages_table";
     public static final String TABLE_HISTORY = "History_table";
-        public static final String TABLE_FAV = "Favourite_table";
+    public static final String TABLE_FAV = "Favourite_table";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "PAGENAME";
     public static final String COL_3 = "CHEACK";
@@ -21,7 +21,7 @@
     public static final String COLL_3 = "TITLE";
     public static final String COLL_4 = "SOURCE";
     public static final String COLL_5 = "PICTURE";
-        public static final String COLL_6 = "FAV";
+    public static final String COLL_6 = "FAV";
 
 
     public DatabaseHelper(Context context) {
@@ -62,6 +62,10 @@
 
             return true;
         }
+    }
+    public  Cursor test(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT name FROM sqlite_master  WHERE type='table'", null);
     }
     public boolean insertData(String pagename,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -104,7 +108,7 @@
             }
         }
 
-        public boolean insertData(String pagename, String title, String source, String picture, String fav) {
+        public boolean insertDataFave(String pagename, String title, String source, String picture, String fav) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             //contentValues.put(COL_1,id);
@@ -131,12 +135,13 @@
         return res;
     }
 
-        public Cursor getData(String table, String title) {
-            SQLiteDatabase db = this.getWritableDatabase();
-            Cursor res = db.rawQuery("select * from " + table + " where TITLE = ?", new String[]{title}, null);
+    public Cursor getData(String table, String title) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-            return res;
-        }
+        Cursor res = db.rawQuery("select * from " + table + " where TITLE = ?", new String[]{title}, null);
+
+        return res;
+    }
 
 
     public boolean updateData(String pagename,String cheack) {
@@ -148,28 +153,16 @@
         db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
         return true;
     }
-    /*public boolean updateData(String id,String cheack) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,id);
-       // contentValues.put(COL_2,pagename);
-        contentValues.put(COL_3,cheack);
-        db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
-        return true;
-    }*/
 
-   /* public Integer deleteData (String id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
-    }*/
-   public Integer deleteData(String title) {
+   public Integer deleteData(String title,String table) {
             SQLiteDatabase db = this.getWritableDatabase();
        // db.e
-       return db.delete(TABLE_HISTORY, "TITLE = ?", new String[]{title});
+       return db.delete(table, "TITLE = ?", new String[]{title});
 
         }
-        public void deleteDataAll () {
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.execSQL("delete from "+TABLE_HISTORY);
-        }
+
+    public void deleteDataAll (String table) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+table);
+    }
 }

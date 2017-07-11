@@ -70,43 +70,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 VideoPlayer.video = video;
                 boolean done = true;
                 Log.d("aa",HistoryActivity.videos+" Addpter");
-                /*Cursor c = MainActivity.myDb.getData(DatabaseHelper.TABLE_HISTORY,video.getTitle());
-                if(c.getCount() == 0) {
-                    Log.d("aa","Exicteddd");
-                }*/
-                MainActivity.myDb.deleteData(video.getTitle());
+
+                //How !!
+                MainActivity.myDb.deleteData(video.getTitle(),DatabaseHelper.TABLE_HISTORY);
                 MainActivity.myDb.insertData(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture());
 
-                /*HistoryActivity.videos.addFirst(video);
-                for (Video vv: HistoryActivity.videos) {
-                    if(vv.getSource().equals(video.getSource())){
-                        Log.d("aaa","equal");
-                        done = false;
-                        int index =HistoryActivity.videos.indexOf(video);
-                        HistoryActivity.videos.addFirst(video);
-                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
-                        Video vs = HistoryActivity.videos.remove(index+1);
-//                        Log.d("aa","    " + HistoryActivity.videos.get(index+1).getTitle());
-                        //Cursor c = MainActivity.myDb.getData(DatabaseHelper.TABLE_HISTORY,""+(index));
-                        //Log.d("aa",c.getString(1));
-                        //int x= MainActivity.myDb.deleteData((index+1)+"");
-                        //Log.d("aa",vs.getId()+"    " + HistoryActivity.videos.get(index+1).getTitle());
-                        MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
-                        break;
-                    }
-                }
-                if(done){
-                    HistoryActivity.videos.addFirst(video);
-                    MainActivity.myDb.insertData(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture());
-                }*/
-                //historyVideos.add(0,video);
-                /*for(int i= 0;i < historyVideos.size();i++){
-                    historyVideos.add(i+1,historyVideos.get(i));
-                }*/
+
                 Intent myIntent = new Intent(mContext, VideoPlayer.class);
-               // myIntent.putExtra("key", value); //Optional parameters
+
                 mContext.startActivity(myIntent);
-                //CurrentActivity.this.startActivity(myIntent);
+
 
 
             }
@@ -147,32 +120,3 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
 
 }
-
-
-/*holder.view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction())
-                {
-                    case MotionEvent.ACTION_DOWN: {
-                        Log.d("item","Yes");
-                        /*mediaController.hide();
-                        showController = false;
-                        if(mediaController.isActivated()){
-
-                            Log.d("item","YesShowing");
-                            mediaController.hide();
-                        }
-
-                        break;
-                    }
-                    default:
-                    {
-                        //showController = true;
-                        Log.d("item","NO");
-                    }
-                }
-
-                return false;
-            }
-        });*/

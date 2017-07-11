@@ -1,16 +1,12 @@
 package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -18,26 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
 
     List<Video> videos;
     Context mContext;
     public static String id;
 
-    public HistoryAdapter(List<Video> videos, Context mContext) {
+    public FavoriteAdapter(List<Video> videos, Context mContext) {
         this.videos = videos;
         this.mContext = mContext;
         holders = new ArrayList<>();
     }
 
     @Override
-    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
-        // create a new view
+    public FavoriteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                         int viewType) {
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.history_item, parent, false);
-        //view.setId(R.id.videoView);
 
         return new ViewHolder(view);
     }
@@ -72,9 +67,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         public double id;
         public ImageView imageView;
         public View view;
-        //public VideoView videoView;
-        //public ProgressBar progressBar;
-        //public ImageButton imageButton;
+
 
         public ViewHolder(View v) {
             super(v);
@@ -83,16 +76,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             mTitleTextView = (TextView) v.findViewById(R.id.title_history);
             pageName = (TextView) v.findViewById(R.id.pageName_history);
             imageView = (ImageView) v.findViewById(R.id.imageView_history);
-            //videoView = (VideoView) v.findViewById(R.id.videoView);
-           // progressBar = (ProgressBar) v.findViewById(R.id.progressbar);
-           // imageButton = (ImageButton) v.findViewById(R.id.play_button);
 
             holders.add(this);
 
         }
 
     }
-
-
-
 }

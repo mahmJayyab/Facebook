@@ -15,9 +15,10 @@ public class Video {
     private String picture = null;
     private String created_date = null;
     private String summary;
+    private String favorite = "false";
 
-    public Video(String source, String description, String title,String id, String picture,
-                 String created_date, String summary,String pageName){
+    public Video(String source, String description, String title, String id, String picture,
+                 String created_date, String summary, String pageName){
         this.setSource(source);
         this.setDescription(description);
         this.setTitle(title);
@@ -26,6 +27,19 @@ public class Video {
         this.setCreated_date(created_date);
         this.setSummary(summary);
         this.setPageName(pageName);
+    }
+
+    public Video(String source, String description, String title, String id, String picture,
+                 String created_date, String summary, String pageName, String favorite){
+        this.setSource(source);
+        this.setDescription(description);
+        this.setTitle(title);
+        this.setId(id);
+        this.setPicture(picture);
+        this.setCreated_date(created_date);
+        this.setSummary(summary);
+        this.setPageName(pageName);
+        this.setFavorite(favorite);
     }
     public Video(String pageName, String title, String source, String picture ){
         this.setSource(source);
@@ -39,6 +53,10 @@ public class Video {
     }
 
     private String image;
+
+    public void setFavorite(String favorite) {
+        this.favorite = favorite;
+    }
 
     public String getSource() {
         return source;
@@ -110,5 +128,8 @@ public class Video {
 
     public void setPageName(String pageName) {
         this.pageName = pageName;
+    }
+    public String getFavorite() {
+        return favorite;
     }
 }

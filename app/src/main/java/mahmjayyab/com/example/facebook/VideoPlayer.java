@@ -1,29 +1,45 @@
 package mahmjayyab.com.example.facebook;
 
 import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.VideoView;
+
+import java.util.ArrayList;
 
 public class VideoPlayer extends AppCompatActivity {
 
     ProgressDialog pDialog;
     VideoView videoview;
+    ImageButton favoButton;
      static Video video;
+    String isFav = "false";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-        Video v = video;
+        Cursor res = MainActivity.myDb.getData(DatabaseHelper.TABLE_FAV,video.getTitle());
+        while (res.moveToNext()){
+            isFav = res.getString(5);
+        }
+
+       Video v = video;
         // Find your VideoView in your video_main.xml layout
         videoview = (VideoView) findViewById(R.id.VideoView);
         // Execute StreamVideo AsyncTask
-
+        favoButton =(ImageButton) findViewById(R.id.fav_button);
         // Create a progressbar
         pDialog = new ProgressDialog(VideoPlayer.this);
         // Set progressbar title
@@ -34,6 +50,11 @@ public class VideoPlayer extends AppCompatActivity {
         pDialog.setCancelable(false);
         // Show progressbar
         pDialog.show();
+
+        if(isFav.equals("true"))
+            favoButton.setImageResource(R.drawable.ic_star_black_24dp);
+        else
+            favoButton.setImageResource(R.drawable.ic_star_border_black_24dp);
 
         try {
             // Start the MediaController
@@ -50,6 +71,25 @@ public class VideoPlayer extends AppCompatActivity {
             Log.e("Error", e.getMessage());
             e.printStackTrace();
         }
+
+        favoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.myDb.deleteData(video.getTitle(),DatabaseHelper.TABLE_FAV);
+                if(isFav.equals("false")){
+                     isFav="true";
+                    MainActivity.myDb.insertDataFave(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture(),"true");
+                    favoButton.setImageResource(R.drawable.ic_star_black_24dp);
+
+                }
+                else{
+                    isFav="false";
+                    //MainActivity.myDb.insertDataFave(video.getPageName(),video.getTitle(),video.getSource(),video.getPicture(),"false");
+                    favoButton.setImageResource(R.drawable.ic_star_border_black_24dp);
+                }
+
+            }
+        });
 
         videoview.requestFocus();
         videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
