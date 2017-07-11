@@ -4,26 +4,24 @@ import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.VideoView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
 
 public class VideoPlayer extends AppCompatActivity {
 
+    static Video video;
     ProgressDialog pDialog;
     VideoView videoview;
     ImageButton favoButton;
-     static Video video;
     String isFav = "false";
 
     @Override
@@ -50,7 +48,15 @@ public class VideoPlayer extends AppCompatActivity {
         pDialog.setCancelable(false);
         // Show progressbar
         pDialog.show();
+        ImageView page_pic = (ImageView) findViewById(R.id.page_image);
+        TextView title = (TextView) findViewById(R.id.title);
+        TextView description = (TextView) findViewById(R.id.description);
+        TextView likes = (TextView) findViewById(R.id.likes_count);
 
+        Picasso.with(this).load("https://graph.facebook.com/" + video.getPage_pic() + "/picture?type=large").into(page_pic);
+        title.setText(video.getTitle());
+        description.setText(video.getDescription());
+        likes.setText(video.getLikes());
         if(isFav.equals("true"))
             favoButton.setImageResource(R.drawable.ic_star_black_24dp);
         else

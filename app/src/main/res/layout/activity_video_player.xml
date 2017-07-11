@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.acer.fbtestmoh97.VideoPlayer">
+    tools:context=".VideoPlayer">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         tools:layout_editor_absoluteX="0dp"
@@ -16,16 +17,54 @@
             android:id="@+id/VideoView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
 
-        <ImageButton
-            android:id="@+id/fav_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_star_border_black_24dp"
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_below="@+id/VideoView"
-            android:layout_alignParentEnd="true" />
+            android:columnCount="3"
+            android:rowCount="3">
+
+            <ImageView
+                android:id="@+id/page_image"
+                android:layout_width="55dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/likes_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:layout_gravity="fill_horizontal"
+                android:text="TextView" />
+
+            <ImageButton
+                android:id="@+id/fav_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/VideoView"
+                android:layout_columnSpan="3"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/ic_star_border_black_24dp" />
+        </GridLayout>
 
     </RelativeLayout>
-
 </android.support.constraint.ConstraintLayout>

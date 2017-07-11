@@ -34,32 +34,33 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static BufferedReader reader;
     public static ArrayList<String> links = new ArrayList<>();
+    public static ArrayList<String> linksPaging = new ArrayList<>();
     public static ArrayList<String> allPages = new ArrayList<>();
     public static ArrayList<Boolean> checked = new ArrayList<>();
     public static FileOutputStream outputStream;
     public static File file;
+    public static DatabaseHelper myDb;
+    static int lastVisibleItemIndex = 1;
     FileReader in;
     VideoAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
     ArrayList<Video> videos = new ArrayList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
-    int lastIndex;
+    int lastIndex = 0;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     FragmentManager fm = getSupportFragmentManager();
     Context cont;
     boolean isClosed = false;
-
-    public static DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +120,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void add10() {
-        Log.d("asd", lastIndex + ":" + videos.size());
+        Log.d("asd", lastIndex + "::" + videos.size());
         int max = Math.min(lastIndex + 10, videos.size());
+        Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
         for (int i = lastIndex; i < max; i++) {
+            Log.d("asd", "ADD VIDEO INDEX " + i + ":" + videos.get(i).getTitle());
             visibleVideos.add(videos.get(i));
         }
-        lastIndex += 10;
+        Log.d("asd", "TOTAL VISABLE:" + visibleVideos.size());
+        lastIndex = Math.min(lastIndex + 10, videos.size());
+        if (lastIndex == videos.size()) {
+            getVideos();
+            Log.d("asd", "getFUCKINGnew");
+        }
     }
 
     public void initialize() {
@@ -166,9 +174,12 @@ public class MainActivity extends AppCompatActivity
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-                Log.d("asd", totalItemCount + ":" + lastVisibleItem);
-                if (totalItemCount - 1 == lastVisibleItem) {
-                    add10();
+                if (lastVisibleItemIndex < lastVisibleItem) {
+                    Log.d("asd", totalItemCount + ":" + lastVisibleItem);
+                    if (totalItemCount - 1 == lastVisibleItem) {
+                        add10();
+                    }
+                    lastVisibleItemIndex = lastVisibleItem;
                 }
             }
         });
@@ -179,10 +190,23 @@ public class MainActivity extends AppCompatActivity
         AccessToken token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
                 null, null, null, null, null);
         GraphRequestBatch batch = new GraphRequestBatch();
-        for (String link : links) {
+        if (links.size() != linksPaging.size()) {
+            linksPaging.clear();
+            for (int i = 0; i < links.size(); i++) {
+                linksPaging.add("");
+            }
+        }
+        for (int i = 0; i < links.size(); i++) {
+            String link = links.get(i);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, -4);
+            String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
+            if (!linksPaging.get(i).isEmpty()) afterQ = "&after=" + linksPaging.get(i);
+            final int linkIndex = i;
+
 
             batch.add(new GraphRequest(token,
-                    link + "/videos?fields=from,source,id,picture,created_time,likes.limit(0).summary(true),description,title"
+                            link + "/videos?fields=from,source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse response) {
@@ -203,11 +227,14 @@ public class MainActivity extends AppCompatActivity
                             id = (js.has("id") && !js.isNull("id")) ? js.getString("id") : "";
                             created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
                             //String summary = js.getString("summary");
-
-                            video = new Video(source, description, title, id, picture, created_time,"", pageName);
+                            String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
+                            String page_pic = js.getJSONObject("from").getString("id");
+                            video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
 
                             videos.add(video);
                         }
+                        linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
+                        Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
                         // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 
 

@@ -1,7 +1,5 @@
 package mahmjayyab.com.example.facebook;
 
-import java.util.List;
-
 /**
  * Created by mahmo on 7/4/2017.
  */
@@ -14,8 +12,10 @@ public class Video {
     private String id = null;
     private String picture = null;
     private String created_date = null;
-    private String summary;
+    private String likes;
     private String favorite = "false";
+    private String page_pic = null;
+    private String image;
 
     public Video(String source, String description, String title, String id, String picture,
                  String created_date, String summary, String pageName){
@@ -25,22 +25,24 @@ public class Video {
         this.setId(id);
         this.setPicture(picture);
         this.setCreated_date(created_date);
-        this.setSummary(summary);
+        this.setLikes(summary);
         this.setPageName(pageName);
-    }
 
+    }
     public Video(String source, String description, String title, String id, String picture,
-                 String created_date, String summary, String pageName, String favorite){
+                 String created_date, String likes, String pageName, String favorite, String page_pic) {
         this.setSource(source);
         this.setDescription(description);
         this.setTitle(title);
         this.setId(id);
         this.setPicture(picture);
         this.setCreated_date(created_date);
-        this.setSummary(summary);
+        this.setLikes(likes);
         this.setPageName(pageName);
         this.setFavorite(favorite);
+        this.setPage_pic(page_pic);
     }
+
     public Video(String pageName, String title, String source, String picture ){
         this.setSource(source);
         //this.setDescription(description);
@@ -50,12 +52,6 @@ public class Video {
         //this.setCreated_date(created_date);
        // this.setSummary(summary);
         this.setPageName(pageName);
-    }
-
-    private String image;
-
-    public void setFavorite(String favorite) {
-        this.favorite = favorite;
     }
 
     public String getSource() {
@@ -106,12 +102,12 @@ public class Video {
         this.created_date = created_date;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getLikes() {
+        return likes;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setLikes(String summary) {
+        this.likes = summary;
     }
 
     public String getImage() {
@@ -129,7 +125,20 @@ public class Video {
     public void setPageName(String pageName) {
         this.pageName = pageName;
     }
+
     public String getFavorite() {
         return favorite;
+    }
+
+    public void setFavorite(String favorite) {
+        this.favorite = favorite;
+    }
+
+    public String getPage_pic() {
+        return page_pic;
+    }
+
+    public void setPage_pic(String page_pic) {
+        this.page_pic = page_pic;
     }
 }
