@@ -1,6 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,6 +57,26 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+        holder.supscripeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(page.getIsSupscripe().equals("true")){
+                    page.setIsSupscripe("false");
+                    MainActivity.myDb.updateData(page.getPageName(),"false");
+                    holder.supscripeBtn.setText("Supscribe");
+                    //didnt worked
+                    holder.supscripeBtn.setBackground(Drawable.createFromPath("#bdc1c9"));
+                }
+                else{
+                    page.setIsSupscripe("true");
+                    MainActivity.myDb.updateData(page.getPageName(),"true");
+                    holder.supscripeBtn.setText("Supscribed");
+                    //didnt worked
+                    holder.supscripeBtn.setBackground(Drawable.createFromPath("#3f51b5"));
+                }
 
             }
         });
