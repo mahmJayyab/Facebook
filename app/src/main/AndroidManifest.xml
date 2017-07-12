@@ -32,6 +32,7 @@
         </activity>
         <activity android:name=".VideoPlayer" />
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".SupscripeActivity" />
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".DFragment" />
         <activity android:name=".AlertDFragment"></activity>

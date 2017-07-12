@@ -43,7 +43,7 @@ public class AlertDFragment extends DialogFragment {
                             }
                             pageName = temp;
                             MainActivity.allPages.add(pageName);
-                            MainActivity.checked.add(true);
+                            MainActivity.isSupscripe.add(true);
                             MainActivity.myDb.insertData(pageName,"true");
                         }
 

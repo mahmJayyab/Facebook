@@ -108,7 +108,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             mDescriptionTextView = (TextView) v.findViewById(R.id.description);
             imageView = (ImageView) v.findViewById(R.id.imageView);
             videoView = (VideoView) v.findViewById(R.id.videoView);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressbar);
+            //progressBar = (ProgressBar) v.findViewById(R.id.progressbar);
            // imageButton = (ImageButton) v.findViewById(R.id.play_button);
 
             holders.add(this);

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<String> links = new ArrayList<>();
     public static ArrayList<String> linksPaging = new ArrayList<>();
     public static ArrayList<String> allPages = new ArrayList<>();
-    public static ArrayList<Boolean> checked = new ArrayList<>();
+    public static ArrayList<Boolean> isSupscripe = new ArrayList<>();
     public static FileOutputStream outputStream;
     public static File file;
     public static DatabaseHelper myDb;
@@ -55,11 +55,15 @@ public class MainActivity extends AppCompatActivity
     LinearLayoutManager mLayoutManager;
     ArrayList<Video> videos = new ArrayList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
+    ArrayList<Pages> pages = new ArrayList<>();
     int lastIndex = 0;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     FragmentManager fm = getSupportFragmentManager();
     Context cont;
+
+    String pagePic;
+    String pageCove;
     boolean isClosed = false;
 
     @Override
@@ -69,29 +73,37 @@ public class MainActivity extends AppCompatActivity
 
         links.clear();
         allPages.clear();
-        checked.clear();
+        isSupscripe.clear();
         cont =this;
         //creat database
         myDb=new DatabaseHelper(this);
+
         //creat cursor to read from database
         Cursor res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         if(res.getCount() == 0) {
             // show message
-            myDb.insertData("MEQBAS","true");
-            myDb.insertData("ajplusarabi","true");
+            myDb.insertDataPageInf("MEQBAS","true","https://graph.facebook.com/1860629474208112/picture?type=large","https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2");
+           // myDb.insertData("MEQBAS","true");
+            // myDb.insertData("ajplusarabi","true");
             Log.d("asd","Null");
         }
+        res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         while (res.moveToNext()) {
-            String item = res.getString(1);
+            String pageName = res.getString(1);
             String temp = res.getString(2);
-            Log.d("asd", item + "\t" + temp);
-            allPages.add(item);
+            String pagePic = res.getString(3);
+            String pageCover = res.getString(4);
+            int i =0;
+            Log.d("asd", pageName + "\t" + temp);
+            allPages.add(pageName);
             if (temp.equals("true")) {
-                links.add(item);
-                checked.add(true);
+                links.add(pageName);
+                isSupscripe.add(true);
             } else {
-                checked.add(false);
+                isSupscripe.add(false);
             }
+            pages.add(i,new Pages(pageName,temp,pagePic,pageCover));
+            i++;
         }
 
         initialize();
@@ -230,13 +242,15 @@ public class MainActivity extends AppCompatActivity
                             String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
                             String page_pic = js.getJSONObject("from").getString("id");
                             video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
-
                             videos.add(video);
                         }
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
+                        String idPic = jsPageName.getString("id");
+                        pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
+                        pageCove= jsPageName.getJSONObject("cover").getString("source");
+
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
                         // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
-
 
                     } catch (Exception ex) {
                         Log.d("asd", ex.toString());
@@ -297,24 +311,24 @@ public class MainActivity extends AppCompatActivity
         Integer test = item.getItemId();
         switch (item.getItemId()) {
             case R.id.action_settings:
-                DialogSettings dS = new DialogSettings();
+                Intent myIntent = new Intent(cont, SupscripeActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent);
                 // Show Alert DialogFragment
-                dS.show(fm, "Alert Dialog Fragment");
                 break;
-
             case R.id.action_history:
 
                 Log.d("asd", cont + "");
-                Intent myIntent = new Intent(cont, HistoryActivity.class);
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                cont.startActivity(myIntent);
+                Intent myIntent1 = new Intent(cont, HistoryActivity.class);
+                myIntent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent1);
                 break;
             case R.id.action_favorite:
 
                 Log.d("asd", cont + "");
-                Intent myIntent1 = new Intent(cont, FavoriteActivity.class);
-                myIntent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                cont.startActivity(myIntent1);
+                Intent myIntent2 = new Intent(cont, FavoriteActivity.class);
+                myIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cont.startActivity(myIntent2);
                 break;
 
         }

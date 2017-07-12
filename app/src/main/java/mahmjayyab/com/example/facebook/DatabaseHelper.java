@@ -17,6 +17,8 @@
     public static final String COL_1 = "ID";
     public static final String COL_2 = "PAGENAME";
     public static final String COL_3 = "CHEACK";
+    public static final String COL_4 = "PAGEPIC";
+    public static final String COL_5 = "PAGECOVER";
     public static final String COLL_2 = "PAGENAME";
     public static final String COLL_3 = "TITLE";
     public static final String COLL_4 = "SOURCE";
@@ -30,7 +32,7 @@
         // id INTEGER PRIMARY KEY AUTOINCREMENT
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT)");
+        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT,PAGEPIC TEXT,PAGECOVER TEXT)");
         db.execSQL("create table " + TABLE_HISTORY +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT)");
         db.execSQL("create table " + TABLE_FAV + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT,FAV TEXT)");
 
@@ -86,6 +88,27 @@
             return true;
         }
     }
+        public boolean insertDataPageInf(String pagename,String cheack,String pagePic,String pageCover) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            // contentValues.put(COL_1,id);
+            contentValues.put(COL_2,pagename);
+            contentValues.put(COL_3,cheack);
+            contentValues.put(COL_4,pagePic);
+            contentValues.put(COL_5,pageCover);
+            long result = db.insert(TABLE_NAME,null ,contentValues);
+            if(result == -1)
+            {
+                Log.d("ccc","Faild");
+                return false;
+            }
+            else
+            {
+                Log.d("ccc","Suc");
+
+                return true;
+            }
+        }
         public boolean insertData(String pagename,String title,String source,String picture) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();

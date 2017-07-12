@@ -20,7 +20,7 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
         for(int i=0; i< size; i++){
             items[i] = MainActivity.allPages.get(i);
         }
-        for (int i =0;i<size;i++) checkedItems[i] = MainActivity.checked.get(i);
+        for (int i =0;i<size;i++) checkedItems[i] = MainActivity.isSupscripe.get(i);
         //MainActivity.checked.toArray(checkedItems);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder
@@ -28,8 +28,8 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     for(int i =0; i< checkedItems.length; i++){
-                        MainActivity.checked.set(i,checkedItems[i]);
-                        Log.d("asd",MainActivity.checked.get(i)+"");
+                        MainActivity.isSupscripe.set(i,checkedItems[i]);
+                        Log.d("asd",MainActivity.isSupscripe.get(i)+"");
                         if(checkedItems[i])
                             MainActivity.myDb.updateData(items[i],"true");
                         else
