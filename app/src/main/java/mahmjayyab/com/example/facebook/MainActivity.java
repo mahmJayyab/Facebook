@@ -221,6 +221,7 @@ public class MainActivity extends Fragment
             if (!linksPaging.get(i).isEmpty()) afterQ = "&after=" + linksPaging.get(i);
             final int linkIndex = i;
 
+            // Change
             Log.d("eee",link);
             batch.add(new GraphRequest(token,
                             link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
