@@ -3,22 +3,25 @@ package mahmjayyab.com.example.facebook;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 /**
  * Created by mahmo on 7/9/2017.
  */
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends Fragment {
     public static LinkedList<Video> videos = new LinkedList();
     HistoryAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
@@ -27,36 +30,28 @@ public class HistoryActivity extends AppCompatActivity {
     ProgressBar progressBar;
     int lastIndex;
     ArrayList<String> existIds = new ArrayList<>();
-    FragmentManager fm = getSupportFragmentManager();
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_history);
-        videos.clear();
-        Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_HISTORY);
-        while (res1.moveToNext()) {
-            String pageName = res1.getString(1);
-            String title = res1.getString(2);
-            String source = res1.getString(3);
-            String picture = res1.getString(4);
-            Log.d("asd", pageName + "\t" + title);
-            Video video = new Video(pageName, title, source, picture);
-            videos.addFirst(video);
-            Log.d("aa", videos + " Main");
-            Log.d("aa", video.getPageName() + "556565");
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //super.onCreate(bundle);
+        //setContentView(R.layout.activity_history);
+
+        //Log.d("accc","AAAAAAAAAAAAA");
+        Log.d("yyy","History");
+        View rootView = inflater.inflate(R.layout.activity_history, container, false);
+        Log.d("accc",rootView+"");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                //this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //drawer.setDrawerListener(toggle);
-       // toggle.syncState();
+        // toggle.syncState();
 
         //Clear history
-        FloatingActionButton clear = (FloatingActionButton) findViewById(R.id.clear);
+       /* FloatingActionButton clear = (FloatingActionButton) rootView.findViewById(R.id.clear);
 
         clear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -70,21 +65,21 @@ public class HistoryActivity extends AppCompatActivity {
                 // I did it haha
 
             }
-        });
+        });*/
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(rootView.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         //edit her visble video
-        historyAdapter = new HistoryAdapter(videos, this);
+        historyAdapter = new HistoryAdapter(videos, rootView.getContext());
         mRecyclerView.setAdapter(historyAdapter);
 
-        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+       /* mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -107,12 +102,15 @@ public class HistoryActivity extends AppCompatActivity {
 
                 videos.add(video);
             }*/
-           // existIds.add(video.getId());
+        // existIds.add(video.getId());
 
         //add10();
         if(!videos.isEmpty())
-        progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        getVideos();
+        return rootView;
     }
+
 
    /* public void add10() {
         Log.d("asd", lastIndex + "::" + videos.size());
@@ -122,4 +120,35 @@ public class HistoryActivity extends AppCompatActivity {
         }
         lastIndex += 15;
     }*/
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+
+        //historyAdapter.notifyDataSetChanged();
+        //mRecyclerView.refreshDrawableState();
+
+    }
+
+    public void getVideos()
+    {
+        videos.clear();
+        Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_HISTORY);
+        while (res1.moveToNext()) {
+            String pageName = res1.getString(1);
+            String title = res1.getString(2);
+            String source = res1.getString(3);
+            String picture = res1.getString(4);
+            Log.d("asd", pageName + "\t" + title);
+            Video video = new Video(pageName, title, source, picture);
+            videos.addFirst(video);
+            Log.d("aa", videos + " Main");
+            Log.d("aff", video.getPageName() + video.getTitle());
+        }
+        historyAdapter.notifyDataSetChanged();
+
+    }
+
+
 }

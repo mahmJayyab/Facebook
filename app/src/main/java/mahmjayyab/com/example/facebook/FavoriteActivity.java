@@ -1,14 +1,18 @@
 package mahmjayyab.com.example.facebook;
 
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ import java.util.LinkedList;
  * Created by mahmo on 7/9/2017.
  */
 
-public class FavoriteActivity extends AppCompatActivity {
+public class FavoriteActivity extends Fragment {
 
     public static LinkedList<Video> videos = new LinkedList();
     FavoriteAdapter favoriteAdapter;
@@ -28,10 +32,12 @@ public class FavoriteActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_history);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //super.onCreate(bundle);
+        //setContentView(R.layout.activity_history);
+        Log.d("yyy","Favour");
+        View rootView = inflater.inflate(R.layout.activity_history, container, false);
         videos.clear();
         Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_FAV);
         while (res1.moveToNext()) {
@@ -48,30 +54,30 @@ public class FavoriteActivity extends AppCompatActivity {
 
 
         //Clear history
-        FloatingActionButton clear = (FloatingActionButton) findViewById(R.id.clear);
+        /*FloatingActionButton clear = (FloatingActionButton) rootView.findViewById(R.id.clear);
 
         clear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 visibleVideos.clear();
                 videos.clear();
-               // VideoAdapter.hv.clear();
+                // VideoAdapter.hv.clear();
                 MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_FAV);
                 mRecyclerView.setAdapter(favoriteAdapter);
 
             }
-        });
+        });*/
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(rootView.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         //edit her visble video
-        favoriteAdapter = new FavoriteAdapter(videos, this);
+        favoriteAdapter = new FavoriteAdapter(videos, rootView.getContext());
         mRecyclerView.setAdapter(favoriteAdapter);
 
 
@@ -83,8 +89,12 @@ public class FavoriteActivity extends AppCompatActivity {
         }
 
         if(!videos.isEmpty())
-        progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        return  rootView;
     }
 
 
+
+
 }
+

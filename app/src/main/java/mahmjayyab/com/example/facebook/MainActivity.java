@@ -5,20 +5,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
+
+
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
+
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
@@ -38,7 +41,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends Fragment
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static BufferedReader reader;
@@ -59,9 +62,8 @@ public class MainActivity extends AppCompatActivity
     int lastIndex = 0;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
-    FragmentManager fm = getSupportFragmentManager();
     Context cont;
-
+    View rootView;
     int idConnt = 1;
     String link;
     String pagePic;
@@ -71,16 +73,16 @@ public class MainActivity extends AppCompatActivity
     boolean isClosed = false;
     Cursor res;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.activity_main, container, false);
 
         links.clear();
         allPages.clear();
         isSupscripe.clear();
-        cont =this;
+        cont =rootView.getContext();
         //creat database
-        myDb=new DatabaseHelper(this);
+        myDb=new DatabaseHelper(cont);
 
         //creat cursor to read from database
          res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity
             Log.d("aa",video.getPageName()+"556565");
         }
 
-
+        return rootView;
 
     }
 
@@ -151,8 +153,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initialize() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        /*rootView.setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -168,21 +170,21 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(cont);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new VideoAdapter(visibleVideos, this);
+        mAdapter = new VideoAdapter(visibleVideos, cont);
         mRecyclerView.setAdapter(mAdapter);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+       // NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
+       // navigationView.setNavigationItemSelectedListener(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -303,23 +305,23 @@ public class MainActivity extends AppCompatActivity
         //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
     }
 
-    @Override
+ /*   @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -359,7 +361,7 @@ public class MainActivity extends AppCompatActivity
             int id = item.getItemId();
 
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            DrawerLayout drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }

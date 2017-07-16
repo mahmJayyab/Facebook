@@ -1,15 +1,19 @@
 package mahmjayyab.com.example.facebook;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.facebook.GraphRequest;
@@ -25,20 +29,24 @@ import java.util.LinkedList;
  * Created by mahmo on 7/9/2017.
  */
 
-public class SupscripeActivity extends AppCompatActivity {
+public class SupscripeActivity extends Fragment {
     public static LinkedList<Pages> pages = new LinkedList();
     SupscripeAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
-    FragmentManager fm = getSupportFragmentManager();
+    View rootView;
+    FragmentManager fm;
+    Context cont;
     static ProgressBar progressBar;
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setContentView(R.layout.activity_supscripe);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.activity_main, container, false);
+        fm =getChildFragmentManager();
+        cont = rootView.getContext();
         pages.clear();
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         Log.d("ccc","test");
         Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
         while (res.moveToNext()) {
@@ -64,27 +72,27 @@ public class SupscripeActivity extends AppCompatActivity {
         }*/
 
 
-        FloatingActionButton addNewPage = (FloatingActionButton) findViewById(R.id.add);
-
+       /* FloatingActionButton addNewPage = (FloatingActionButton) rootView.findViewById(R.id.add);
+        Log.d("ffff",addNewPage+"");
         addNewPage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDFragment alertdFragment = new AlertDFragment();
                 alertdFragment.show(fm, "Alert Dialog Fragment");
 
             }
-        });
+        });*/
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
 
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(cont);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //edit her visble video
-        historyAdapter = new SupscripeAdapter(pages, this);
+        historyAdapter = new SupscripeAdapter(pages, cont);
         mRecyclerView.setAdapter(historyAdapter);
 
 
@@ -98,7 +106,7 @@ public class SupscripeActivity extends AppCompatActivity {
         if(!pages.isEmpty())
         progressBar.setVisibility(View.GONE);
 
-
+        return rootView;
     }
 
 }
