@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryActivity">
+    tools:context=".SupscripeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         app:backgroundTint="@color/com_facebook_button_login_background_color"
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
-    <include layout="@layout/content_history"
+    <include layout="@layout/content_supscribtion"
         android:id="@+id/include" />
 
 </android.support.design.widget.CoordinatorLayout>

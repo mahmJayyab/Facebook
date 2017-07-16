@@ -55,17 +55,21 @@ public class MainActivity extends AppCompatActivity
     LinearLayoutManager mLayoutManager;
     ArrayList<Video> videos = new ArrayList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
-    ArrayList<Pages> pages = new ArrayList<>();
+    static ArrayList<Pages> pages = new ArrayList<>();
     int lastIndex = 0;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     FragmentManager fm = getSupportFragmentManager();
     Context cont;
 
+    int i = 0;
+    String link;
     String pagePic;
     String pageCove;
+    static GraphRequestBatch batch;
+    static AccessToken token;
     boolean isClosed = false;
-
+    Cursor res;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,22 +83,23 @@ public class MainActivity extends AppCompatActivity
         myDb=new DatabaseHelper(this);
 
         //creat cursor to read from database
-        Cursor res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
+         res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         if(res.getCount() == 0) {
             // show message
-            myDb.insertDataPageInf("MEQBAS","true","https://graph.facebook.com/1860629474208112/picture?type=large","https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2");
+            myDb.insertData("MEQBAS","true");
+            myDb.insertData("ajplusarabi","true");
            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
             Log.d("asd","Null");
         }
-        res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         while (res.moveToNext()) {
+            String id = res.getString(0);
             String pageName = res.getString(1);
+            Log.d("ccc",pageName);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
             String pageCover = res.getString(4);
-            int i =0;
-            Log.d("asd", pageName + "\t" + temp);
+            Log.d("cccc", id+"  "+ pageName + "\t" + temp);
             allPages.add(pageName);
             if (temp.equals("true")) {
                 links.add(pageName);
@@ -102,8 +107,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 isSupscripe.add(false);
             }
-            pages.add(i,new Pages(pageName,temp,pagePic,pageCover));
-            i++;
+
         }
 
         initialize();
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity
             String title = res1.getString(2);
             String source = res1.getString(3);
             String picture = res1.getString(4);
-            Log.d("asd", pageName + "\t" + title);
+            Log.d("cccc", pageName + "\t" + title);
             Video video = new Video(pageName,title,source,picture);
             HistoryActivity.videos.addFirst(video);
             Log.d("aa",HistoryActivity.videos+" Main");
@@ -199,17 +203,17 @@ public class MainActivity extends AppCompatActivity
 
     public void getVideos() {
         if (links.isEmpty()) return;
-        AccessToken token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
+         token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
                 null, null, null, null, null);
-        GraphRequestBatch batch = new GraphRequestBatch();
+         batch = new GraphRequestBatch();
         if (links.size() != linksPaging.size()) {
             linksPaging.clear();
             for (int i = 0; i < links.size(); i++) {
                 linksPaging.add("");
             }
         }
-        for (int i = 0; i < links.size(); i++) {
-            String link = links.get(i);
+        for (i = 0; i < links.size(); i++) {
+             link = links.get(i);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
             String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
@@ -218,12 +222,13 @@ public class MainActivity extends AppCompatActivity
 
 
             batch.add(new GraphRequest(token,
-                            link + "/videos?fields=from,source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
+                            link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse response) {
                     Video video;
                     String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
+                    int index=0;
                     try {
                         JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                          pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
@@ -246,14 +251,18 @@ public class MainActivity extends AppCompatActivity
                         }
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
                         String idPic = jsPageName.getString("id");
+
                         pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                         pageCove= jsPageName.getJSONObject("cover").getString("source");
-
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
+                        Log.d("ccc",link +"  "+linkIndex+" "+pagePic+" "+pageCove);
+                        pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove));
+                        boolean b=myDb.updateDataByID((i+1)+"",pageName,"true");
+                        Log.d("ccc"," Upadate? "+b);
                         // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 
                     } catch (Exception ex) {
-                        Log.d("asd", ex.toString());
+                        Log.d("ddd", ex.toString());
                     }
                     new Handler().post(new Runnable() {
                         @Override
@@ -267,7 +276,6 @@ public class MainActivity extends AppCompatActivity
             })
 
             );
-
         }
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
@@ -283,7 +291,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
         batch.executeAsync();
-
+        //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
+        while (res.moveToNext()) {
+            Log.d("ccc", " page name "+res.getString(1));
+        }
     }
 
     @Override

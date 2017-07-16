@@ -3,10 +3,19 @@ package mahmjayyab.com.example.facebook;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONObject;
 
 public class AlertDFragment extends DialogFragment {
     public static  String pageName;
@@ -41,10 +50,24 @@ public class AlertDFragment extends DialogFragment {
                             } else {
                                 temp = p;
                             }
-                            pageName = temp;
-                            MainActivity.allPages.add(pageName);
-                            MainActivity.isSupscripe.add(true);
-                            MainActivity.myDb.insertData(pageName,"true");
+                            boolean b = true;
+                            Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
+                            while (res.moveToNext()) {
+                                String pageName = res.getString(1);
+                                if(pageName.equals(temp) ){
+                                    b=false;
+                                    Log.d("ccc","false");
+                                }
+                            }
+                            if(b) {
+                                pageName = temp;
+                                MainActivity.allPages.add(temp);
+                                MainActivity.isSupscripe.add(true);
+                                MainActivity.myDb.insertData(temp, "true");
+                            }
+                            else{
+                                MainActivity.myDb.updateData(temp,"true");
+                            }
                         }
 
                     }
@@ -56,5 +79,8 @@ public class AlertDFragment extends DialogFragment {
                         // Do something else
                     }
                 }).create();
+
+
     }
 }
+

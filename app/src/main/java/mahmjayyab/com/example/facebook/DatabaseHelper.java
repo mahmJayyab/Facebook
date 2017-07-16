@@ -176,6 +176,26 @@
         db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
         return true;
     }
+        public boolean updateDataByID(String id,String pagename,String cheack) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL_1,id);
+            contentValues.put(COL_2,pagename);
+            contentValues.put(COL_3,cheack);
+            db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { pagename });
+            return true;
+        }
+        public boolean updateData(String pagename,String cheack,String pagePic,String pageCover) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            //contentValues.put(COL_1,id);
+            contentValues.put(COL_2,pagename);
+            contentValues.put(COL_3,cheack);
+            contentValues.put(COL_4,pagePic);
+            contentValues.put(COL_5,pageCover);
+            db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
+            return true;
+        }
 
    public Integer deleteData(String title,String table) {
             SQLiteDatabase db = this.getWritableDatabase();

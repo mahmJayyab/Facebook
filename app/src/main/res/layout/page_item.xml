@@ -69,7 +69,7 @@
                     android:padding="8dp"
                     android:text="Title"
                     android:textAlignment="textStart"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -78,9 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center"
-                    android:background="#3f51b5"
-                    android:elevation="0dp"
-                    android:text="Supscripe" />
+                     />
             </LinearLayout>
 
 

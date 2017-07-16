@@ -1,6 +1,8 @@
 package mahmjayyab.com.example.facebook;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,9 +49,20 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Pages page = pages.get(position);
-        Log.d("ccc",page.getPagePic());
+        //Log.d("ccc",page.getPagePic());
+        Log.d("ccc",page.getPageName() +"  "+position);
         holder.mpageNameTextView.setText(page.getPageName());
+
         //holder.pageName.setText(page.getIsSupscripe());
+        if(page.getIsSupscripe().equals("true")){
+            holder.supscripeBtn.setText("Supscribed");
+            holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
+        }
+        else{
+            holder.supscripeBtn.setText("Supscribe");
+            holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
+        }
+
 
         Picasso.with(mContext).load(page.getPagePic()).into(holder.pagePic);
         Picasso.with(mContext).load(page.getPageCover()).into(holder.pageCover);
@@ -65,17 +78,18 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
             public void onClick(View v) {
                 if(page.getIsSupscripe().equals("true")){
                     page.setIsSupscripe("false");
-                    MainActivity.myDb.updateData(page.getPageName(),"false");
+                    boolean b= MainActivity.myDb.updateData(page.getPageName(),"false");
+                    Log.d("ccc",page.getPageName()+" Upadate? "+b);
                     holder.supscripeBtn.setText("Supscribe");
                     //didnt worked
-                    holder.supscripeBtn.setBackground(Drawable.createFromPath("#bdc1c9"));
+                    holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
                 }
                 else{
                     page.setIsSupscripe("true");
                     MainActivity.myDb.updateData(page.getPageName(),"true");
                     holder.supscripeBtn.setText("Supscribed");
                     //didnt worked
-                    holder.supscripeBtn.setBackground(Drawable.createFromPath("#3f51b5"));
+                    holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
                 }
 
             }
@@ -109,6 +123,9 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
             holders.add(this);
 
         }
+
+    }
+    void checkSupscribe(){
 
     }
 
