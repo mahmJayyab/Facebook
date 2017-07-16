@@ -15,6 +15,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class AlertDFragment extends DialogFragment {
@@ -79,8 +80,9 @@ public class AlertDFragment extends DialogFragment {
                                             // Insert your code here
                                             try {
                                                 JSONObject jsPageName =  response.getJSONObject();
-                                                Log.d("yyy",jsPageName+"");
-                                                if(!jsPageName.getString("id").isEmpty()){
+                                                String ms = "Please reduce the amount of data you're asking for, then retry your request";
+                                                Log.d("yyy",jsPageName+"   ");
+                                                if( !jsPageName.getString("name").isEmpty() || !jsPageName.getJSONArray("data").isNull(0) ){
                                                     if(b) {
 
                                                         MainActivity.allPages.add(pageName);
@@ -97,7 +99,7 @@ public class AlertDFragment extends DialogFragment {
 
 
                                             } catch (Exception ex) {
-                                                Log.d("ddd", ex.toString());
+                                                Log.d("yyy", ex.toString());
                                             }
                                         }
                                     });
