@@ -18,6 +18,8 @@ import com.facebook.HttpMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class AlertDFragment extends DialogFragment {
     public static  String pageName;
     boolean b = true;
@@ -72,8 +74,10 @@ public class AlertDFragment extends DialogFragment {
                                 MainActivity.myDb.updateData(temp,"true");
                             }*/
                            pageName = temp;
+                            Calendar cal = Calendar.getInstance();
+                            String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{name}",
+                                    MainActivity.token, pageName+"/videos?fields=from{name}"+afterQ,
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
