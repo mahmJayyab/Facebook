@@ -73,16 +73,18 @@ public class AlertDFragment extends DialogFragment {
                             }*/
                            pageName = temp;
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName,
+                                    MainActivity.token, pageName+"/videos?fields=from{name}",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
                                             // Insert your code here
                                             try {
-                                                JSONObject jsPageName =  response.getJSONObject();
+                                                //JSONObject jsPageName =  response.getJSONObject();
+                                                JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                                                 String ms = "Please reduce the amount of data you're asking for, then retry your request";
                                                 Log.d("yyy",jsPageName+"   ");
-                                                if( !jsPageName.getString("name").isEmpty() || !jsPageName.getJSONArray("data").isNull(0) ){
+                                                //Log.d("yyy",jsPageName.getString("videos"));
+                                                if( jsPageName.has("name")|| !jsPageName.getJSONArray("data").isNull(0)  ){
                                                     if(b) {
 
                                                         MainActivity.allPages.add(pageName);
