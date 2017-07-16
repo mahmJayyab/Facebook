@@ -51,7 +51,7 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         final Pages page = pages.get(position);
         //Log.d("ccc",page.getPagePic());
         Log.d("ccc",page.getPageName() +"  "+position);
-        holder.mpageNameTextView.setText(page.getPageName());
+        holder.mpageNameTextView.setText(page.getLink());
 
         //holder.pageName.setText(page.getIsSupscripe());
         if(page.getIsSupscripe().equals("true")){
@@ -78,7 +78,7 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
             public void onClick(View v) {
                 if(page.getIsSupscripe().equals("true")){
                     page.setIsSupscripe("false");
-                    boolean b= MainActivity.myDb.updateData(page.getPageName(),"false");
+                    boolean b= MainActivity.myDb.updateDataByLink(page.getLink(),"false");
                     Log.d("ccc",page.getPageName()+" Upadate? "+b);
                     holder.supscripeBtn.setText("Supscribe");
                     //didnt worked
@@ -86,7 +86,7 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
                 }
                 else{
                     page.setIsSupscripe("true");
-                    MainActivity.myDb.updateData(page.getPageName(),"true");
+                    MainActivity.myDb.updateDataByLink(page.getLink(),"true");
                     holder.supscripeBtn.setText("Supscribed");
                     //didnt worked
                     holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));

@@ -40,8 +40,16 @@ public class SupscripeActivity extends AppCompatActivity {
         pages.clear();
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Log.d("ccc","test");
-        for(int i=0; i<MainActivity.pages.size();i++){
-            pages.addFirst(MainActivity.pages.get(i));
+        Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
+        while (res.moveToNext()) {
+            String id = res.getString(0);
+            String pageLink = res.getString(1);
+            String temp = res.getString(2);
+            String pagePic = res.getString(3);
+            String pageCover = res.getString(4);
+            String pageName = res.getString(5);
+            Pages page = new Pages(pageLink,temp,pagePic,pageCover,pageName);
+            pages.addFirst(page);
         }
         Log.d("ss",MainActivity.pages.size()+"");
        /* Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);

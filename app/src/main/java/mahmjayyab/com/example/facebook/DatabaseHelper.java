@@ -19,6 +19,7 @@
     public static final String COL_3 = "CHEACK";
     public static final String COL_4 = "PAGEPIC";
     public static final String COL_5 = "PAGECOVER";
+    public static final String COL_6 = "LINK";
     public static final String COLL_2 = "PAGENAME";
     public static final String COLL_3 = "TITLE";
     public static final String COLL_4 = "SOURCE";
@@ -32,7 +33,7 @@
         // id INTEGER PRIMARY KEY AUTOINCREMENT
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT,PAGEPIC TEXT,PAGECOVER TEXT)");
+        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,CHEACK TEXT,PAGEPIC TEXT,PAGECOVER TEXT,LINK TEXT)");
         db.execSQL("create table " + TABLE_HISTORY +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT)");
         db.execSQL("create table " + TABLE_FAV + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,PAGENAME TEXT,TITLE TEXT,SOURCE TEXT,PICTURE TEXT,FAV TEXT)");
 
@@ -176,24 +177,37 @@
         db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
         return true;
     }
-        public boolean updateDataByID(String id,String pagename,String cheack) {
-            SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_1,id);
-            contentValues.put(COL_2,pagename);
-            contentValues.put(COL_3,cheack);
-            db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { pagename });
-            return true;
-        }
-        public boolean updateData(String pagename,String cheack,String pagePic,String pageCover) {
+        public boolean updateDataByLink(String link,String cheack) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             //contentValues.put(COL_1,id);
-            contentValues.put(COL_2,pagename);
+            contentValues.put(COL_3,cheack);
+            //contentValues.put(COL_4,pagePic);
+           // contentValues.put(COL_5,pageCover);
+            contentValues.put(COL_6,link);
+            db.update(TABLE_NAME, contentValues, "LINK = ?",new String[] { link });
+            return true;
+        }
+        public boolean updateDataByID(String id,String cheack,String pagePic,String pageCover,String link) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL_1,id);
+            //contentValues.put(COL_2,pagename);
             contentValues.put(COL_3,cheack);
             contentValues.put(COL_4,pagePic);
             contentValues.put(COL_5,pageCover);
-            db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
+            contentValues.put(COL_6,link);
+            db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+            return true;
+        }
+        public boolean updateDataPic(String id,String pagePic, String cheack) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL_1,id);
+            //contentValues.put(COL_2,pagename);
+            contentValues.put(COL_3,cheack);
+            contentValues.put(COL_4,pagePic);
+            db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
             return true;
         }
 

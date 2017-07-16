@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fm = getSupportFragmentManager();
     Context cont;
 
-    int i = 0;
+    int idConnt = 1;
     String link;
     String pagePic;
     String pageCove;
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         while (res.moveToNext()) {
             String id = res.getString(0);
             String pageName = res.getString(1);
-            Log.d("ccc",pageName);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
             String pageCover = res.getString(4);
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                 linksPaging.add("");
             }
         }
-        for (i = 0; i < links.size(); i++) {
+        for (int i = 0; i < links.size(); i++) {
              link = links.get(i);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
@@ -220,7 +219,7 @@ public class MainActivity extends AppCompatActivity
             if (!linksPaging.get(i).isEmpty()) afterQ = "&after=" + linksPaging.get(i);
             final int linkIndex = i;
 
-
+            Log.d("eee",link);
             batch.add(new GraphRequest(token,
                             link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
@@ -229,6 +228,7 @@ public class MainActivity extends AppCompatActivity
                     Video video;
                     String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
                     int index=0;
+
                     try {
                         JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                          pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
@@ -252,13 +252,21 @@ public class MainActivity extends AppCompatActivity
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
                         String idPic = jsPageName.getString("id");
 
+
                         pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                         pageCove= jsPageName.getJSONObject("cover").getString("source");
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
                         Log.d("ccc",link +"  "+linkIndex+" "+pagePic+" "+pageCove);
-                        pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove));
-                        boolean b=myDb.updateDataByID((i+1)+"",pageName,"true");
+                        pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
+                        boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
                         Log.d("ccc"," Upadate? "+b);
+
+                        res.moveToPosition(0);
+                        while (res.moveToNext()) {
+                            Log.d("ccc",idConnt+""+"  id = "+res.getString(0)+" page pic "+res.getString(3)
+                                   + " page name "+res.getString(5));
+                        }
+                        idConnt++;
                         // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 
                     } catch (Exception ex) {
@@ -290,11 +298,9 @@ public class MainActivity extends AppCompatActivity
                 add10();
             }
         });
+
         batch.executeAsync();
         //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
-        while (res.moveToNext()) {
-            Log.d("ccc", " page name "+res.getString(1));
-        }
     }
 
     @Override

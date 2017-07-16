@@ -9,6 +9,7 @@ public class Pages {
     private String pagePic;
     private String pageCover;
     private String isSupscripe;
+    private String link;
 
     public Pages(){
 
@@ -18,6 +19,13 @@ public class Pages {
         this.pagePic  = pagePic;
         this.pageCover = pageCover;
         this.isSupscripe = isSupscripe;
+    }
+    public Pages (String pageName,String isSupscripe ,String pagePic,String pageCover,String link){
+        this.pageName = pageName;
+        this.pagePic  = pagePic;
+        this.pageCover = pageCover;
+        this.isSupscripe = isSupscripe;
+        this.link = link;
     }
     public Pages (String pageName,String isSupscripe){
         this.pageName = pageName;
@@ -46,6 +54,10 @@ public class Pages {
         return isSupscripe;
     }
 
+    public String getLink() {
+        return link;
+    }
+
     public void setPageName(String pageName) {
         this.pageName = pageName;
     }
@@ -61,4 +73,5 @@ public class Pages {
     public void setIsSupscripe(String isSupscripe) {
         this.isSupscripe = isSupscripe;
     }
+
 }

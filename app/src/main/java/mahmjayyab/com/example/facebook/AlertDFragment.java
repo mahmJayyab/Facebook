@@ -19,12 +19,14 @@ import org.json.JSONObject;
 
 public class AlertDFragment extends DialogFragment {
     public static  String pageName;
+    boolean b = true;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final EditText input = new EditText(getActivity());
 
         input.setHint("https://www.facebook.com/PageName");
+        input.setText("https://www.facebook.com/");
         return new AlertDialog.Builder(getActivity())
                 // Set Dialog Icon
                 //.setIcon(R.drawable.side_nav_bar)
@@ -50,7 +52,7 @@ public class AlertDFragment extends DialogFragment {
                             } else {
                                 temp = p;
                             }
-                            boolean b = true;
+                             b = true;
                             Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
                             while (res.moveToNext()) {
                                 String pageName = res.getString(1);
@@ -59,7 +61,7 @@ public class AlertDFragment extends DialogFragment {
                                     Log.d("ccc","false");
                                 }
                             }
-                            if(b) {
+                           /* if(b) {
                                 pageName = temp;
                                 MainActivity.allPages.add(temp);
                                 MainActivity.isSupscripe.add(true);
@@ -67,8 +69,43 @@ public class AlertDFragment extends DialogFragment {
                             }
                             else{
                                 MainActivity.myDb.updateData(temp,"true");
-                            }
+                            }*/
+                           pageName = temp;
+                            GraphRequest request = GraphRequest.newGraphPathRequest(
+                                    MainActivity.token, pageName,
+                                    new GraphRequest.Callback() {
+                                        @Override
+                                        public void onCompleted(GraphResponse response) {
+                                            // Insert your code here
+                                            try {
+                                                JSONObject jsPageName =  response.getJSONObject();
+                                                Log.d("yyy",jsPageName+"");
+                                                if(!jsPageName.getString("id").isEmpty()){
+                                                    if(b) {
+
+                                                        MainActivity.allPages.add(pageName);
+                                                        MainActivity.isSupscripe.add(true);
+                                                        MainActivity.myDb.insertData(pageName, "true");
+                                                    }
+                                                    else{
+                                                        MainActivity.myDb.updateData(pageName,"true");
+                                                    }
+
+                                                } else{
+                                                    Log.d("yyy","Error Page");
+                                                }
+
+
+                                            } catch (Exception ex) {
+                                                Log.d("ddd", ex.toString());
+                                            }
+                                        }
+                                    });
+
+                            request.executeAsync();
+
                         }
+
 
                     }
                 })
