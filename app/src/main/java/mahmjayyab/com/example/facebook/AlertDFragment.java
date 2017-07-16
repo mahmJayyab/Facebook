@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -23,7 +24,7 @@ import java.util.Calendar;
 public class AlertDFragment extends DialogFragment {
     public static  String pageName;
     boolean b = true;
-
+    String afterQ;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final EditText input = new EditText(getActivity());
@@ -75,13 +76,14 @@ public class AlertDFragment extends DialogFragment {
                             }*/
                            pageName = temp;
                             Calendar cal = Calendar.getInstance();
-                            String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
+                            afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{name}"+afterQ,
+                                    MainActivity.token, pageName+"/videos?fields=from{name}&since=2017-07-01",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
                                             // Insert your code here
+                                            //Log.d("yyy",pageName+"/videos?fields=from{name}"+afterQ);
                                             try {
                                                 //JSONObject jsPageName =  response.getJSONObject();
                                                 JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
@@ -94,6 +96,8 @@ public class AlertDFragment extends DialogFragment {
                                                         MainActivity.allPages.add(pageName);
                                                         MainActivity.isSupscripe.add(true);
                                                         MainActivity.myDb.insertData(pageName, "true");
+                                                       /* Toast.makeText(AlertDFragment,
+                                                                "Your Message", Toast.LENGTH_LONG).show();*/
                                                     }
                                                     else{
                                                         MainActivity.myDb.updateData(pageName,"true");
