@@ -100,7 +100,7 @@ public class AlertDFragment extends DialogFragment {
                                                         String idPic = jsPageName.getString("id");
                                                         String name = jsPageName.getString("name");
                                                         String pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
-                                                        MainActivity.myDb.insertData_Pages(pageName, "true",pagePic,cover,name);
+                                                        MainActivity.myDb.insertData_Pages(name, "true",pagePic,cover,pageName);
                                                        /* Toast.makeText(AlertDFragment,
                                                                 "Your Message", Toast.LENGTH_LONG).show();*/
                                                     }

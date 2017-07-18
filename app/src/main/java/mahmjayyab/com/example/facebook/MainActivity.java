@@ -94,8 +94,8 @@ public class MainActivity extends Fragment
             allPages.add("MEQBAS");
             isSupscripe.add(true);
             links.add("MEQBAS");
-            myDb.insertData_Pages("MEQBAS","true","https://graph.facebook.com/1860629474208112/picture?type=large"
-                    ,"https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2","مقبس - Meqbas");
+            myDb.insertData_Pages("مقبس - Meqbas","true","https://graph.facebook.com/1860629474208112/picture?type=large"
+                    ,"https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2","MEQBAS");
             //myDb.insertData("ajplusarabi","true");
            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
@@ -104,11 +104,11 @@ public class MainActivity extends Fragment
         }
         while (res.moveToNext()) {
             String id = res.getString(0);
-            String pageLink = res.getString(1);
+            String pageLink = res.getString(5);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
             String pageCover = res.getString(4);
-            String pageName = res.getString(5);
+            String pageName = res.getString(1);
             Log.d("cccc", id+"  "+ pageName + "\t" + temp);
             //Pages p = new Pages(pageLink,temp,pagePic,pageCover,pageName);
             //subPages.addFirst(p);
@@ -230,11 +230,11 @@ public class MainActivity extends Fragment
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
             String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
-            if (!linksPaging.get(i).isEmpty()) afterQ = "&after=" + linksPaging.get(i);
+            if (!linksPaging.get(i).isEmpty() ) afterQ = "&after=" + linksPaging.get(i);
             final int linkIndex = i;
 
             // Change
-            Log.d("eee",link);
+            Log.d("eee",link+"  linksPagingsize  "+linksPaging.size());
             batch.add(new GraphRequest(token,
                             link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
@@ -270,9 +270,9 @@ public class MainActivity extends Fragment
                         pageCove= jsPageName.getJSONObject("cover").getString("source");
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
                         Log.d("ccc",link +"  "+linkIndex+" "+pagePic+" "+pageCove);
-                        pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
-                        boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
-                        Log.d("ccc"," Upadate? "+b);
+                        //pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
+                        //boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
+
                         //myDb.deleteData_P(link,DatabaseHelper.TABLE_NAME);
                         //myDb.insertData_Pages(link,"true",pagePic,pageCove,pageName_Orgin);
                         res.moveToPosition(0);

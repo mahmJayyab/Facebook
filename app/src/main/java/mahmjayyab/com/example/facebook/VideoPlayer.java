@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,9 +31,10 @@ public class VideoPlayer extends AppCompatActivity {
     VideoView videoview;
     ImageButton favoButton;
     String isFav = "false";
-   static boolean run = true;
+    static boolean run = true;
     RelativeLayout relativeLayout;
     LinearLayout linearLayout;
+    FrameLayout.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +84,11 @@ public class VideoPlayer extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d("fff","enter");
-        relativeLayout =(RelativeLayout) findViewById(R.id.container);
+
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            //linearLayout.setVisibility(View.GONE);
             Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();

@@ -100,20 +100,26 @@ public class SupscripeActivity extends Fragment {
         pages.clear();
         //pages.addAll(MainActivity.subPages);
         Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
-        //Log.d("a123",MainActivity.res.toString());
+
         while (res.moveToNext()) {
+
             String id = res.getString(0);
 
-            String pageLink = res.getString(1);
+            String pageLink = res.getString(5);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
             String pageCover = res.getString(4);
-            String pageName = res.getString(5);
-            Pages page = new Pages(pageLink,temp,pagePic,pageCover,pageName);
+            String pageName = res.getString(1);
+            Pages page = new Pages(pageName,temp,pagePic,pageCover,pageLink);
             pages.addFirst(page);
             Log.d("a123",pageName+"   "+pagePic);
         }
-        res.close();
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
 }

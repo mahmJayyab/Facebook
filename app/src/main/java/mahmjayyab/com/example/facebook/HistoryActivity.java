@@ -150,13 +150,13 @@ public class HistoryActivity extends Fragment {
 
     }
 
-   public static void clearHistory(){
+   /*public static void clearHistory(){
        visibleVideos.clear();
        videos.clear();
        // VideoAdapter.hv.clear();
        MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
        mRecyclerView.setAdapter(historyAdapter);
-    }
+    }*/
 
 
 }

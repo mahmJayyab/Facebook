@@ -47,7 +47,7 @@
         onCreate(db);
     }
 
-    public boolean insertData(String id,String pagename,String cheack) {
+    /*public boolean insertData(String id,String pagename,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_1,id);
@@ -65,33 +65,22 @@
 
             return true;
         }
-    }
+    }*/
     public  Cursor test(){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT name FROM sqlite_master  WHERE type='table'", null);
     }
-    public boolean insertData_Pages(String pageLink,String cheack, String pic, String cover,String pageName){
+    public void insertData_Pages(String pageName,String cheack, String pic, String cover,String pageLink){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2,pageLink);
+        contentValues.put(COL_2,pageName);
         contentValues.put(COL_3,cheack);
         contentValues.put(COL_4,pic);
         contentValues.put(COL_5,cover);
-        contentValues.put(COL_6,pageName);
-        long result = db.insert(TABLE_NAME,null ,contentValues);
-        if(result == -1)
-        {
-            Log.d("aa","Faild");
-            return false;
-        }
-        else
-        {
-            Log.d("aa","Suc");
-
-            return true;
-        }
+        contentValues.put(COL_6,pageLink);
+        db.insert(TABLE_NAME,null ,contentValues);
     }
-    public boolean insertData(String pagename,String cheack) {
+    /*public boolean insertData(String pagename,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
        // contentValues.put(COL_1,id);
@@ -109,8 +98,8 @@
 
             return true;
         }
-    }
-        public boolean insertDataPageInf(String pagename,String cheack,String pagePic,String pageCover) {
+    }*/
+        /*public boolean insertDataPageInf(String pagename,String cheack,String pagePic,String pageCover) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             // contentValues.put(COL_1,id);
@@ -130,7 +119,7 @@
 
                 return true;
             }
-        }
+        }*/
         public boolean insertData(String pagename,String title,String source,String picture) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -189,13 +178,13 @@
     }
 
 
-    public boolean updateData(String pagename,String cheack) {
+    public boolean updateData(String link,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         //contentValues.put(COL_1,id);
-        contentValues.put(COL_2,pagename);
+        contentValues.put(COL_6,link);
         contentValues.put(COL_3,cheack);
-        db.update(TABLE_NAME, contentValues, "PAGENAME = ?",new String[] { pagename });
+        db.update(TABLE_NAME, contentValues, "LINK = ?",new String[] { link });
         return true;
     }
         public boolean updateDataByLink(String link,String cheack) {
@@ -221,7 +210,7 @@
             db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
             return true;
         }
-        public boolean updateDataPic(String id,String pagePic, String cheack) {
+        /*public boolean updateDataPic(String id,String pagePic, String cheack) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(COL_1,id);
@@ -230,7 +219,7 @@
             contentValues.put(COL_4,pagePic);
             db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
             return true;
-        }
+        }*/
 
    public Integer deleteData(String title,String table) {
             SQLiteDatabase db = this.getWritableDatabase();
@@ -238,12 +227,13 @@
        return db.delete(table, "TITLE = ?", new String[]{title});
 
         }
-   public Integer deleteData_P(String link,String table) {
+        public Integer deleteData_P(String name,String table) {
             SQLiteDatabase db = this.getWritableDatabase();
             // db.e
-            return db.delete(table, "PAGENAME = ?", new String[]{link});
+            return db.delete(table, "PAGENAME = ?", new String[]{name});
 
         }
+
     public void deleteDataAll (String table) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+table);

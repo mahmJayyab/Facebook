@@ -1,5 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
+import android.content.ComponentCallbacks2;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -84,12 +86,9 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         finish();
-        if(t.getSelectedTabPosition() != 0)
-        {
-            Log.d("a123","Not Home");
-            mSectionsPagerAdapter.getItem(0);
-        }
+
     }
+
 
     @Override
     public void onStart()
@@ -102,7 +101,7 @@ public class Main2Activity extends AppCompatActivity {
         }
         if(tab2 != null){
             Log.d("aff","Tab2");
-            tab2.getSub();
+            //tab2.getSub();
         }
     }
 
@@ -157,6 +156,7 @@ public class Main2Activity extends AppCompatActivity {
                 case 1:
                     Log.d("accc","1");
                     tab2 = new SupscripeActivity();
+
                     //addPage.setVisibility(View.VISIBLE);
                     //clearHistory.setVisibility(View.GONE);
                     //clearFavorite.setVisibility(View.GONE);

@@ -51,7 +51,7 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         final Pages page = pages.get(position);
         //Log.d("ccc",page.getPagePic());
         Log.d("ccc",page.getPageName() +"  "+position);
-        holder.mpageNameTextView.setText(page.getLink());
+        holder.mpageNameTextView.setText(page.getPageName());
 
         //holder.pageName.setText(page.getIsSupscripe());
         if(page.getIsSupscripe().equals("true")){
@@ -78,24 +78,28 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         holder.supscripeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if(page.getIsSupscripe().equals("true")){
                     page.setIsSupscripe("false");
-                    boolean b= MainActivity.myDb.updateDataByLink(page.getLink(),"false");
-                    Log.d("ccc",page.getPageName()+" Upadate? "+b);
+                    MainActivity.myDb.deleteData_P(page.getPageName(),DatabaseHelper.TABLE_NAME);
+                    MainActivity.myDb.insertData_Pages(page.getPageName(), "false",page.getPagePic(),page.getPageCover(),page.getLink());
                     holder.supscripeBtn.setText("Supscribe");
                     holder.supscripeBtn.setTextColor(Color.rgb(84,108,202));
+
                     //didnt worked
                    // holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
                 }
                 else{
                     page.setIsSupscripe("true");
-                    MainActivity.myDb.updateDataByLink(page.getLink(),"true");
+                    MainActivity.myDb.deleteData_P(page.getPageName(),DatabaseHelper.TABLE_NAME);
+                    MainActivity.myDb.insertData_Pages(page.getPageName(), "true",page.getPagePic(),page.getPageCover(),page.getLink());
                     holder.supscripeBtn.setText("Supscribed");
                     holder.supscripeBtn.setTextColor(Color.rgb(181,195,250));
+
                     //didnt worked
                     //holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
                 }
-
             }
         });
     }
