@@ -43,22 +43,9 @@ public class SupscripeActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_main, container, false);
-        fm =getChildFragmentManager();
         cont = rootView.getContext();
-        pages.clear();
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        Log.d("ccc","test");
-        Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
-        while (res.moveToNext()) {
-            String id = res.getString(0);
-            String pageLink = res.getString(1);
-            String temp = res.getString(2);
-            String pagePic = res.getString(3);
-            String pageCover = res.getString(4);
-            String pageName = res.getString(5);
-            Pages page = new Pages(pageLink,temp,pagePic,pageCover,pageName);
-            pages.addFirst(page);
-        }
+        getSub();
         Log.d("ss",MainActivity.pages.size()+"");
        /* Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
         while (res1.moveToNext()) {
@@ -107,6 +94,22 @@ public class SupscripeActivity extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         return rootView;
+    }
+
+    public void getSub(){
+        pages.clear();
+        Log.d("ccc","test");
+        Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
+        while (res.moveToNext()) {
+            String id = res.getString(0);
+            String pageLink = res.getString(1);
+            String temp = res.getString(2);
+            String pagePic = res.getString(3);
+            String pageCover = res.getString(4);
+            String pageName = res.getString(5);
+            Pages page = new Pages(pageLink,temp,pagePic,pageCover,pageName);
+            pages.addFirst(page);
+        }
     }
 
 }

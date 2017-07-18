@@ -86,8 +86,12 @@ public class Main2Activity extends AppCompatActivity {
         super.onStart();
         if(tab4 != null)
         {
-            Log.d("aff","tab2");
+            Log.d("aff","tab4");
             tab4.getVideos();
+        }
+        if(tab2 != null){
+            Log.d("aff","Tab2");
+            tab2.getSub();
         }
     }
 
