@@ -34,7 +34,8 @@
         </activity>
         <activity android:name=".VideoPlayer"
                   android:label="@string/title_FaceTube"
-                 android:configChanges="orientation|keyboardHidden"
+                  android:configChanges="keyboardHidden|orientation|screenSize"
+                  android:theme="@style/AppTheme.NoActionBar"
             />
 
     </application>
