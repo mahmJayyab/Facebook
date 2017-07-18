@@ -70,6 +70,27 @@
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT name FROM sqlite_master  WHERE type='table'", null);
     }
+    public boolean insertData_Pages(String pageLink,String cheack, String pic, String cover,String pageName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_2,pageLink);
+        contentValues.put(COL_3,cheack);
+        contentValues.put(COL_4,pic);
+        contentValues.put(COL_5,cover);
+        contentValues.put(COL_6,pageName);
+        long result = db.insert(TABLE_NAME,null ,contentValues);
+        if(result == -1)
+        {
+            Log.d("aa","Faild");
+            return false;
+        }
+        else
+        {
+            Log.d("aa","Suc");
+
+            return true;
+        }
+    }
     public boolean insertData(String pagename,String cheack) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -154,7 +175,7 @@
 
 
     public Cursor getAllData(String table) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from "+table,null);
         return res;
     }
@@ -217,7 +238,12 @@
        return db.delete(table, "TITLE = ?", new String[]{title});
 
         }
+   public Integer deleteData_P(String link,String table) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            // db.e
+            return db.delete(table, "PAGENAME = ?", new String[]{link});
 
+        }
     public void deleteDataAll (String table) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+table);

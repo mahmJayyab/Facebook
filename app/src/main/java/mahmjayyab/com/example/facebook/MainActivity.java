@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 
 public class MainActivity extends Fragment
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,7 +72,8 @@ public class MainActivity extends Fragment
     static GraphRequestBatch batch;
     static AccessToken token;
     boolean isClosed = false;
-    Cursor res;
+    static Cursor res;
+    public static LinkedList<Pages> subPages = new LinkedList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,29 +90,38 @@ public class MainActivity extends Fragment
          res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         if(res.getCount() == 0) {
             // show message
-            myDb.insertData("MEQBAS","true");
+
+            allPages.add("MEQBAS");
+            isSupscripe.add(true);
+            links.add("MEQBAS");
+            myDb.insertData_Pages("MEQBAS","true","https://graph.facebook.com/1860629474208112/picture?type=large"
+                    ,"https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2","مقبس - Meqbas");
             //myDb.insertData("ajplusarabi","true");
            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
             Log.d("asd","Null");
-            res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
+            //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         }
         while (res.moveToNext()) {
             String id = res.getString(0);
-            String pageName = res.getString(1);
+            String pageLink = res.getString(1);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
             String pageCover = res.getString(4);
+            String pageName = res.getString(5);
             Log.d("cccc", id+"  "+ pageName + "\t" + temp);
-            allPages.add(pageName);
+            //Pages p = new Pages(pageLink,temp,pagePic,pageCover,pageName);
+            //subPages.addFirst(p);
+            allPages.add(pageLink);
             if (temp.equals("true")) {
-                links.add(pageName);
+                links.add(pageLink);
                 isSupscripe.add(true);
             } else {
                 isSupscripe.add(false);
             }
 
         }
+
 
         initialize();
         getVideos();
@@ -254,7 +265,7 @@ public class MainActivity extends Fragment
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
                         String idPic = jsPageName.getString("id");
 
-
+                        String pageName_Orgin = jsPageName.getString("name");
                         pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                         pageCove= jsPageName.getJSONObject("cover").getString("source");
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
@@ -262,7 +273,8 @@ public class MainActivity extends Fragment
                         pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
                         boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
                         Log.d("ccc"," Upadate? "+b);
-
+                        //myDb.deleteData_P(link,DatabaseHelper.TABLE_NAME);
+                        //myDb.insertData_Pages(link,"true",pagePic,pageCove,pageName_Orgin);
                         res.moveToPosition(0);
                         while (res.moveToNext()) {
                             Log.d("ccc",idConnt+""+"  id = "+res.getString(0)+" page pic "+res.getString(3)

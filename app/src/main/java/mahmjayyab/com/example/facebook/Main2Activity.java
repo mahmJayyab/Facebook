@@ -37,6 +37,7 @@ public class Main2Activity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private TabLayout t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class Main2Activity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_ondemand_video_black_24dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_favorite_black_24dp);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_history_black_24dp);
-
+        t = tabLayout;
         fm = this.getSupportFragmentManager();
 
 
@@ -79,6 +80,16 @@ public class Main2Activity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        if(t.getSelectedTabPosition() != 0)
+        {
+            Log.d("a123","Not Home");
+            mSectionsPagerAdapter.getItem(0);
+        }
+    }
 
     @Override
     public void onStart()

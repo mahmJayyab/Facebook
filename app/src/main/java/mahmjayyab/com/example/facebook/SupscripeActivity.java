@@ -98,10 +98,12 @@ public class SupscripeActivity extends Fragment {
 
     public void getSub(){
         pages.clear();
-        Log.d("ccc","test");
+        //pages.addAll(MainActivity.subPages);
         Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
+        //Log.d("a123",MainActivity.res.toString());
         while (res.moveToNext()) {
             String id = res.getString(0);
+
             String pageLink = res.getString(1);
             String temp = res.getString(2);
             String pagePic = res.getString(3);
@@ -109,7 +111,9 @@ public class SupscripeActivity extends Fragment {
             String pageName = res.getString(5);
             Pages page = new Pages(pageLink,temp,pagePic,pageCover,pageName);
             pages.addFirst(page);
+            Log.d("a123",pageName+"   "+pagePic);
         }
+        res.close();
     }
 
 }

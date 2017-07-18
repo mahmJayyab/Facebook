@@ -79,7 +79,7 @@ public class AlertDFragment extends DialogFragment {
                             Calendar cal = Calendar.getInstance();
                             afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{name}&since=2017-07-01",
+                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}&since=2017-07-01",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
@@ -96,7 +96,11 @@ public class AlertDFragment extends DialogFragment {
 
                                                         MainActivity.allPages.add(pageName);
                                                         MainActivity.isSupscripe.add(true);
-                                                        MainActivity.myDb.insertData(pageName, "true");
+                                                        String cover = jsPageName.getJSONObject("cover").getString("source");
+                                                        String idPic = jsPageName.getString("id");
+                                                        String name = jsPageName.getString("name");
+                                                        String pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
+                                                        MainActivity.myDb.insertData_Pages(pageName, "true",pagePic,cover,name);
                                                        /* Toast.makeText(AlertDFragment,
                                                                 "Your Message", Toast.LENGTH_LONG).show();*/
                                                     }
