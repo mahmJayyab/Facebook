@@ -52,7 +52,7 @@ public class AlertDFragment extends DialogFragment {
                             String p = link.substring(link.indexOf(".com/")+5);
                             String temp = "";
                             if (p.indexOf("/") != -1) {
-                                temp = p.substring(p.indexOf("/"));
+                                temp = p.substring(0,p.indexOf("/"));
                             } else {
                                 temp = p;
                             }
@@ -65,6 +65,7 @@ public class AlertDFragment extends DialogFragment {
                                     Log.d("ccc","false");
                                 }
                             }
+                            Log.d("yyy",temp);
                            /* if(b) {
                                 pageName = temp;
                                 MainActivity.allPages.add(temp);

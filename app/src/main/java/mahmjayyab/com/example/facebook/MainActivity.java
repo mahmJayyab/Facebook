@@ -237,17 +237,14 @@ public class MainActivity extends Fragment
                         JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                          pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
 
-                        // Log.d("asd",response.toString());
                         for (int i = 1; i < response.getJSONObject().getJSONArray("data").length(); i++) {
                             JSONObject js = response.getJSONObject().getJSONArray("data").getJSONObject(i);
-                            //picture=js.getJSONObject("thumbnails").getJSONArray("data").getJSONObject(0).getString("uri");
                             picture = (js.has("picture") && !js.isNull("picture")) ? js.getString("picture") : "";
                             source = (js.has("source") && !js.isNull("source")) ? js.getString("source") : "";
                             title = (js.has("title") && !js.isNull("title")) ? js.getString("title") : "";
                             description = (js.has("description") && !js.isNull("description")) ? js.getString("description") : "";
                             id = (js.has("id") && !js.isNull("id")) ? js.getString("id") : "";
                             created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
-                            //String summary = js.getString("summary");
                             String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
                             String page_pic_id = js.getJSONObject("from").getString("id");
                             String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
