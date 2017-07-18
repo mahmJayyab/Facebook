@@ -1,6 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
@@ -24,13 +26,21 @@ public class VideoPlayer extends AppCompatActivity {
     ImageButton favoButton;
     String isFav = "false";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        Log.d("test","start");
         Cursor res = MainActivity.myDb.getData(DatabaseHelper.TABLE_FAV,video.getTitle());
         while (res.moveToNext()){
             isFav = res.getString(5);
+        }
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            Log.d("test","gog");
+        }
+        else {
+            Log.d("test","wp");
         }
 
        Video v = video;
@@ -50,13 +60,15 @@ public class VideoPlayer extends AppCompatActivity {
         pDialog.show();
         ImageView page_pic = (ImageView) findViewById(R.id.page_image);
         TextView title = (TextView) findViewById(R.id.title);
+        TextView pagename = (TextView) findViewById(R.id.page_Name);
         TextView description = (TextView) findViewById(R.id.description);
         TextView likes = (TextView) findViewById(R.id.likes_count);
 
         Picasso.with(this).load(video.getPage_pic()).into(page_pic);
-        title.setText(video.getPageName());
+        title.setText(video.getTitle());
+        pagename.setText(video.getPageName());
         description.setText(video.getDescription());
-        likes.setText(video.getLikes());
+        likes.setText("Likes: "+video.getLikes());
         if(isFav.equals("true"))
             favoButton.setImageResource(R.drawable.ic_star_black_24dp);
         else
@@ -98,12 +110,17 @@ public class VideoPlayer extends AppCompatActivity {
         });
 
         videoview.requestFocus();
-        videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            // Close the progress bar and play the video
-            public void onPrepared(MediaPlayer mp) {
-                pDialog.dismiss();
-                videoview.start();
-            }
-        });
+        if(!videoview.isPlaying()) {
+            videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                // Close the progress bar and play the video
+                public void onPrepared(MediaPlayer mp) {
+
+                    pDialog.dismiss();
+                    videoview.start();
+
+                }
+            });
+        }
     }
+
 }
