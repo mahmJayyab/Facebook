@@ -4,7 +4,7 @@ package mahmjayyab.com.example.facebook;
  * Created by mahmo on 7/4/2017.
  */
 
-public class Video {
+public class Video  {
     private String pageName = null;
     private String source = null;
     private String description = null;

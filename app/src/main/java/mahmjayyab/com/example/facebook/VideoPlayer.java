@@ -53,8 +53,8 @@ public class VideoPlayer extends AppCompatActivity {
         TextView description = (TextView) findViewById(R.id.description);
         TextView likes = (TextView) findViewById(R.id.likes_count);
 
-        Picasso.with(this).load("https://graph.facebook.com/" + video.getPage_pic() + "/picture?type=large").into(page_pic);
-        title.setText(video.getTitle());
+        Picasso.with(this).load(video.getPage_pic()).into(page_pic);
+        title.setText(video.getPageName());
         description.setText(video.getDescription());
         likes.setText(video.getLikes());
         if(isFav.equals("true"))

@@ -56,11 +56,13 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         //holder.pageName.setText(page.getIsSupscripe());
         if(page.getIsSupscripe().equals("true")){
             holder.supscripeBtn.setText("Supscribed");
-            holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
+            holder.supscripeBtn.setTextColor(Color.rgb(181,195,250));
+            //holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
         }
         else{
             holder.supscripeBtn.setText("Supscribe");
-            holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
+            holder.supscripeBtn.setTextColor(Color.rgb(84,108,202));
+           // holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
         }
 
 
@@ -81,15 +83,17 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
                     boolean b= MainActivity.myDb.updateDataByLink(page.getLink(),"false");
                     Log.d("ccc",page.getPageName()+" Upadate? "+b);
                     holder.supscripeBtn.setText("Supscribe");
+                    holder.supscripeBtn.setTextColor(Color.rgb(84,108,202));
                     //didnt worked
-                    holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
+                   // holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
                 }
                 else{
                     page.setIsSupscripe("true");
                     MainActivity.myDb.updateDataByLink(page.getLink(),"true");
                     holder.supscripeBtn.setText("Supscribed");
+                    holder.supscripeBtn.setTextColor(Color.rgb(181,195,250));
                     //didnt worked
-                    holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
+                    //holder.supscripeBtn.setBackgroundColor(Color.rgb(181,195,250));
                 }
 
             }

@@ -89,10 +89,11 @@ public class MainActivity extends Fragment
         if(res.getCount() == 0) {
             // show message
             myDb.insertData("MEQBAS","true");
-            myDb.insertData("ajplusarabi","true");
+            //myDb.insertData("ajplusarabi","true");
            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
             Log.d("asd","Null");
+            res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
         }
         while (res.moveToNext()) {
             String id = res.getString(0);
@@ -248,7 +249,8 @@ public class MainActivity extends Fragment
                             created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
                             //String summary = js.getString("summary");
                             String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
-                            String page_pic = js.getJSONObject("from").getString("id");
+                            String page_pic_id = js.getJSONObject("from").getString("id");
+                            String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
                             video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
                             videos.add(video);
                         }

@@ -23,10 +23,10 @@ import java.util.LinkedList;
 
 public class HistoryActivity extends Fragment {
     public static LinkedList<Video> videos = new LinkedList();
-    HistoryAdapter historyAdapter;
+    static HistoryAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
-    ArrayList<Video> visibleVideos = new ArrayList<>();
-    RecyclerView mRecyclerView;
+    static ArrayList<Video> visibleVideos = new ArrayList<>();
+    static RecyclerView mRecyclerView;
     ProgressBar progressBar;
     int lastIndex;
     ArrayList<String> existIds = new ArrayList<>();
@@ -148,6 +148,14 @@ public class HistoryActivity extends Fragment {
         }
         historyAdapter.notifyDataSetChanged();
 
+    }
+
+   public static void clearHistory(){
+       visibleVideos.clear();
+       videos.clear();
+       // VideoAdapter.hv.clear();
+       MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
+       mRecyclerView.setAdapter(historyAdapter);
     }
 
 

@@ -1,6 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -27,7 +29,9 @@ public class Main2Activity extends AppCompatActivity {
     SupscripeActivity tab4 ;
     FavoriteActivity tab3 ;
     MainActivity tab1;
-
+    FloatingActionButton clearHistory;
+    FloatingActionButton clearFavorite;
+    FloatingActionButton addPage;
     FragmentManager fm;
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -38,6 +42,9 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+         clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
+        clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
+        addPage = (FloatingActionButton) findViewById(R.id.add);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,14 +141,40 @@ public class Main2Activity extends AppCompatActivity {
                 case 3:
                     Log.d("accc","1");
                     tab2 = new HistoryActivity();
+                   /* addPage.setVisibility(View.GONE);
+                    clearHistory.setVisibility(View.VISIBLE);
+                    clearFavorite.setVisibility(View.GONE);
+                    clearFavorite.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            HistoryActivity.clearHistory();
+                        }
+                    });*/
                     return tab2;
                 case 2:
                     Log.d("accc","1");
                     tab3 = new FavoriteActivity();
+                    /*addPage.setVisibility(View.GONE);
+                    clearHistory.setVisibility(View.GONE);
+                    clearFavorite.setVisibility(View.VISIBLE);
+                    clearFavorite.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            //HistoryActivity.clearHistory();
+                        }
+                    });*/
                     return tab3;
                 case 1:
                     Log.d("accc","1");
                     tab4 = new SupscripeActivity();
+                    //addPage.setVisibility(View.VISIBLE);
+                    //clearHistory.setVisibility(View.GONE);
+                    //clearFavorite.setVisibility(View.GONE);
+                    addPage.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            //HistoryActivity.clearHistory();
+                            AlertDFragment alertdFragment = new AlertDFragment();
+                            alertdFragment.show(fm, "Alert Dialog Fragment");
+                        }
+                    });
                     return tab4;
                 default:
                     return null;

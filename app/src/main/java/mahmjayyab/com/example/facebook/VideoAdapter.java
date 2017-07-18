@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
@@ -61,7 +62,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         holder.videoView.setMediaController(mediaController);
         mediaController.setAnchorView(holder.videoView);
 
-
+        holder.mpageNameTextView.setText(video.getPageName());
+        Picasso.with(mContext).load(video.getPage_pic()).into(holder.pagePic);
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +99,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         public ImageView imageView;
         public View view;
         public VideoView videoView;
+        public TextView mpageNameTextView;
+        public ImageView pagePic;
+
         public ProgressBar progressBar;
         //public ImageButton imageButton;
         public int spec;
@@ -108,6 +113,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             mDescriptionTextView = (TextView) v.findViewById(R.id.description);
             imageView = (ImageView) v.findViewById(R.id.imageView);
             videoView = (VideoView) v.findViewById(R.id.videoView);
+            mpageNameTextView = (TextView) v.findViewById(R.id.pageName);
+            pagePic = (ImageView) v.findViewById(R.id.pagePic);
             //progressBar = (ProgressBar) v.findViewById(R.id.progressbar);
            // imageButton = (ImageButton) v.findViewById(R.id.play_button);
 
