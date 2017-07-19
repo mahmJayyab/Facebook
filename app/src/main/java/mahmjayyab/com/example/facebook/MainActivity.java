@@ -234,7 +234,7 @@ public class MainActivity extends Fragment
             final int linkIndex = i;
 
             // Change
-            Log.d("eee",link+"  linksPagingsize  "+linksPaging.size());
+            Log.d("eee",link+"linksPaging.get(i)  "+linksPaging.get(i) +"   linksPagingsize  "+linksPaging.size());
             batch.add(new GraphRequest(token,
                             link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
