@@ -35,7 +35,7 @@ public class SupscripeActivity extends Fragment {
     LinearLayoutManager mLayoutManager;
     RecyclerView mRecyclerView;
     View rootView;
-    FragmentManager fm;
+    //FragmentManager fm;
     Context cont;
     static ProgressBar progressBar;
 
@@ -93,6 +93,8 @@ public class SupscripeActivity extends Fragment {
         if(!pages.isEmpty())
         progressBar.setVisibility(View.GONE);
 
+        Main2Activity.addPage.setVisibility(View.VISIBLE);
+
         return rootView;
     }
 
@@ -120,6 +122,20 @@ public class SupscripeActivity extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
+        {
+            Log.d("ggg","s");
+            Main2Activity.clearHistory.setVisibility(View.GONE);
+            Main2Activity.clearFavorite.setVisibility(View.GONE);
+            Main2Activity.addPage.setVisibility(View.VISIBLE);
+            Main2Activity.addPage.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //HistoryActivity.clearHistory();
+                    AlertDFragment alertdFragment = new AlertDFragment();
+                    alertdFragment.show(Main2Activity.fm, "Alert Dialog Fragment");
+                }
+            });
+        }
     }
 
 }

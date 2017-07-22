@@ -93,7 +93,24 @@ public class FavoriteActivity extends Fragment {
         return  rootView;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
+        {
+            Main2Activity.clearHistory.setVisibility(View.GONE);
+            Main2Activity.clearFavorite.setVisibility(View.VISIBLE);
+            Main2Activity.addPage.setVisibility(View.GONE);
+        }
+    }
 
+    public void clearFavoutire(){
+        videos.clear();
+        // VideoAdapter.hv.clear();
+        mRecyclerView.setAdapter(favoriteAdapter);
+        MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_FAV);
+
+    }
 
 
 }

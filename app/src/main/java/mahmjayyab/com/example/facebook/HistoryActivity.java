@@ -124,11 +124,21 @@ public class HistoryActivity extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
+        {
+            Log.d("ggg","h");
+            Main2Activity.clearHistory.setVisibility(View.VISIBLE);
+            Main2Activity.clearFavorite.setVisibility(View.GONE);
+            Main2Activity.addPage.setVisibility(View.GONE);
+            Main2Activity.clearFavorite.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    HistoryActivity.clearHistory();
+                    Log.d("ggg","BBBBBBBBBBBBBB");
 
 
-        //historyAdapter.notifyDataSetChanged();
-        //mRecyclerView.refreshDrawableState();
-
+                }
+            });
+        }
     }
 
     public void getVideos()
@@ -150,13 +160,14 @@ public class HistoryActivity extends Fragment {
 
     }
 
-   /*public static void clearHistory(){
+   public static void clearHistory(){
        visibleVideos.clear();
        videos.clear();
-       // VideoAdapter.hv.clear();
        MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
-       mRecyclerView.setAdapter(historyAdapter);
-    }*/
+
+
+    }
+
 
 
 }

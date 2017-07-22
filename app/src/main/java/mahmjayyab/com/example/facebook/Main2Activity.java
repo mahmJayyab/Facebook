@@ -31,10 +31,10 @@ public class Main2Activity extends AppCompatActivity {
     HistoryActivity tab4 ;
     FavoriteActivity tab3 ;
     MainActivity tab1;
-    FloatingActionButton clearHistory;
-    FloatingActionButton clearFavorite;
-    FloatingActionButton addPage;
-    FragmentManager fm;
+    public static FloatingActionButton clearHistory;
+    public static FloatingActionButton clearFavorite;
+    public static FloatingActionButton addPage;
+    public static FragmentManager fm;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -48,7 +48,9 @@ public class Main2Activity extends AppCompatActivity {
          clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
         clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
         addPage = (FloatingActionButton) findViewById(R.id.add);
-
+        clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
+        clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
+        addPage.setVisibility(View.GONE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -147,6 +149,7 @@ public class Main2Activity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
+
             switch (position){
                 case 0:
                     Log.d("accc","0");
@@ -160,39 +163,20 @@ public class Main2Activity extends AppCompatActivity {
                     //addPage.setVisibility(View.VISIBLE);
                     //clearHistory.setVisibility(View.GONE);
                     //clearFavorite.setVisibility(View.GONE);
-                    addPage.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            //HistoryActivity.clearHistory();
-                            AlertDFragment alertdFragment = new AlertDFragment();
-                            alertdFragment.show(fm, "Alert Dialog Fragment");
-                        }
-                    });
+
                     return tab2;
 
                 case 2:
                     Log.d("accc","2");
                     tab3 = new FavoriteActivity();
-                    /*addPage.setVisibility(View.GONE);
-                    clearHistory.setVisibility(View.GONE);
-                    clearFavorite.setVisibility(View.VISIBLE);
-                    clearFavorite.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            //HistoryActivity.clearHistory();
-                        }
-                    });*/
+
+
                     return tab3;
 
                 case 3:
                     Log.d("accc","3");
                     tab4 = new HistoryActivity();
-                   /* addPage.setVisibility(View.GONE);
-                    clearHistory.setVisibility(View.VISIBLE);
-                    clearFavorite.setVisibility(View.GONE);
-                    clearFavorite.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            HistoryActivity.clearHistory();
-                        }
-                    });*/
+
                     return tab4;
                 default:
                     return null;
