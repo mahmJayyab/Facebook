@@ -152,12 +152,12 @@ public class Main2Activity extends AppCompatActivity {
 
             switch (position){
                 case 0:
-                    Log.d("accc","0");
+                    Log.d("ggg","0");
                     tab1 = new MainActivity();
                     //tab1 = new MainActivity();
                     return tab1;
                 case 1:
-                    Log.d("accc","1");
+                    Log.d("ggg","1");
                     tab2 = new SupscripeActivity();
 
                     //addPage.setVisibility(View.VISIBLE);
@@ -167,14 +167,14 @@ public class Main2Activity extends AppCompatActivity {
                     return tab2;
 
                 case 2:
-                    Log.d("accc","2");
+                    Log.d("ggg","2");
                     tab3 = new FavoriteActivity();
 
 
                     return tab3;
 
                 case 3:
-                    Log.d("accc","3");
+                    Log.d("ggg","3");
                     tab4 = new HistoryActivity();
 
                     return tab4;

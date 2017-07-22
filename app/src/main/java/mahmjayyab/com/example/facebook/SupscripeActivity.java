@@ -43,6 +43,7 @@ public class SupscripeActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_main, container, false);
+        Log.d("ggg","Sup");
         cont = rootView.getContext();
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         getSub();
@@ -93,7 +94,7 @@ public class SupscripeActivity extends Fragment {
         if(!pages.isEmpty())
         progressBar.setVisibility(View.GONE);
 
-        Main2Activity.addPage.setVisibility(View.VISIBLE);
+        //Main2Activity.addPage.setVisibility(View.VISIBLE);
 
         return rootView;
     }
@@ -122,12 +123,12 @@ public class SupscripeActivity extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser)
+       if(isVisibleToUser )
         {
             Log.d("ggg","s");
             Main2Activity.clearHistory.setVisibility(View.GONE);
-            Main2Activity.clearFavorite.setVisibility(View.GONE);
             Main2Activity.addPage.setVisibility(View.VISIBLE);
+            Main2Activity.clearFavorite.setVisibility(View.GONE);
             Main2Activity.addPage.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     //HistoryActivity.clearHistory();

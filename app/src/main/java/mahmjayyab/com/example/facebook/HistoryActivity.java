@@ -30,6 +30,7 @@ public class HistoryActivity extends Fragment {
     ProgressBar progressBar;
     int lastIndex;
     ArrayList<String> existIds = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,8 +38,8 @@ public class HistoryActivity extends Fragment {
         //setContentView(R.layout.activity_history);
 
         //Log.d("accc","AAAAAAAAAAAAA");
-        Log.d("yyy","History");
         View rootView = inflater.inflate(R.layout.activity_history, container, false);
+        Log.d("ggg","History");
         Log.d("accc",rootView+"");
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -121,25 +122,6 @@ public class HistoryActivity extends Fragment {
         lastIndex += 15;
     }*/
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser)
-        {
-            Log.d("ggg","h");
-            Main2Activity.clearHistory.setVisibility(View.VISIBLE);
-            Main2Activity.clearFavorite.setVisibility(View.GONE);
-            Main2Activity.addPage.setVisibility(View.GONE);
-            Main2Activity.clearFavorite.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    HistoryActivity.clearHistory();
-                    Log.d("ggg","BBBBBBBBBBBBBB");
-
-
-                }
-            });
-        }
-    }
 
     public void getVideos()
     {
@@ -160,14 +142,32 @@ public class HistoryActivity extends Fragment {
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
+        {
+            Log.d("ggg","h");
+            Main2Activity.clearFavorite.setVisibility(View.GONE);
+            Main2Activity.clearHistory.setVisibility(View.VISIBLE);
+            Main2Activity.addPage.setVisibility(View.GONE);
+            Main2Activity.clearHistory.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d("ggg","Hhhhh");
+                    clearHistory();
+
+
+                }
+            });
+        }
+    }
    public static void clearHistory(){
        visibleVideos.clear();
        videos.clear();
+       mRecyclerView.setAdapter(historyAdapter);
        MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
 
 
     }
-
-
 
 }

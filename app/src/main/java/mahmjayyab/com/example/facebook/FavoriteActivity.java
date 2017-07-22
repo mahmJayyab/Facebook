@@ -36,8 +36,8 @@ public class FavoriteActivity extends Fragment {
                              Bundle savedInstanceState) {
         //super.onCreate(bundle);
         //setContentView(R.layout.activity_history);
-        Log.d("yyy","Favour");
         View rootView = inflater.inflate(R.layout.activity_history, container, false);
+        Log.d("ggg","Favour");
         videos.clear();
         Cursor res1 = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_FAV);
         while (res1.moveToNext()) {
@@ -97,10 +97,18 @@ public class FavoriteActivity extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser)
-        {
+        {   Log.d("ggg","f");
             Main2Activity.clearHistory.setVisibility(View.GONE);
-            Main2Activity.clearFavorite.setVisibility(View.VISIBLE);
             Main2Activity.addPage.setVisibility(View.GONE);
+            Main2Activity.clearFavorite.setVisibility(View.VISIBLE);
+            Main2Activity.clearFavorite.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d("ggg","Ffffff");
+                    clearFavoutire();
+
+
+                }
+            });
         }
     }
 

@@ -78,7 +78,7 @@ public class MainActivity extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_main, container, false);
-
+        Log.d("ggg","main");
         links.clear();
         allPages.clear();
         isSupscripe.clear();
@@ -395,7 +395,7 @@ public class MainActivity extends Fragment
        @Override
        public void setUserVisibleHint(boolean isVisibleToUser) {
            super.setUserVisibleHint(isVisibleToUser);
-           if(isVisibleToUser)
+          if(isVisibleToUser)
            {
                Main2Activity.clearHistory.setVisibility(View.GONE);
                Main2Activity.clearFavorite.setVisibility(View.GONE);
