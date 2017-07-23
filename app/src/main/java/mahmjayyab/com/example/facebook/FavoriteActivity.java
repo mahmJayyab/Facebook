@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,6 +31,7 @@ public class FavoriteActivity extends Fragment {
     ArrayList<Video> visibleVideos = new ArrayList<>();
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
+    TextView emptyText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +73,7 @@ public class FavoriteActivity extends Fragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        emptyText = (TextView) rootView.findViewById(R.id.empty);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -83,13 +86,13 @@ public class FavoriteActivity extends Fragment {
 
 
         //When watch video more than one time >> up to the history one time
-        if(videos.isEmpty()) {
-            Log.d("asd","NullHis");
+        if(!videos.isEmpty()) {
+            progressBar.setVisibility(View.GONE);
+            emptyText.setVisibility(View.GONE);
+        }else {
+            emptyText.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
-
-        if(!videos.isEmpty())
-            progressBar.setVisibility(View.GONE);
         return  rootView;
     }
 
@@ -115,6 +118,7 @@ public class FavoriteActivity extends Fragment {
     public void clearFavoutire(){
         videos.clear();
         // VideoAdapter.hv.clear();
+        emptyText.setVisibility(View.VISIBLE);
         mRecyclerView.setAdapter(favoriteAdapter);
         MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_FAV);
 

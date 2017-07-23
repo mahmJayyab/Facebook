@@ -1,7 +1,14 @@
 package mahmjayyab.com.example.facebook;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -44,6 +51,8 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main2);
          clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
         clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
@@ -206,3 +215,4 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 }
+

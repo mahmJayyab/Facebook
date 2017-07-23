@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ public class HistoryActivity extends Fragment {
     static ArrayList<Video> visibleVideos = new ArrayList<>();
     static RecyclerView mRecyclerView;
     ProgressBar progressBar;
+    TextView emptyText;
     int lastIndex;
     ArrayList<String> existIds = new ArrayList<>();
 
@@ -71,6 +73,7 @@ public class HistoryActivity extends Fragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        emptyText = (TextView) rootView.findViewById(R.id.empty);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -106,8 +109,12 @@ public class HistoryActivity extends Fragment {
         // existIds.add(video.getId());
 
         //add10();
-        if(!videos.isEmpty())
+        if(!videos.isEmpty()) {
             progressBar.setVisibility(View.GONE);
+            emptyText.setVisibility(View.GONE);
+        }else
+            emptyText.setVisibility(View.VISIBLE);
+
         getVideos();
         return rootView;
     }
@@ -161,9 +168,10 @@ public class HistoryActivity extends Fragment {
             });
         }
     }
-   public static void clearHistory(){
+   public void clearHistory(){
        visibleVideos.clear();
        videos.clear();
+       emptyText.setVisibility(View.VISIBLE);
        mRecyclerView.setAdapter(historyAdapter);
        MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
 
