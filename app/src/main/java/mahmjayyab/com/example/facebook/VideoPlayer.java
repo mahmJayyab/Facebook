@@ -33,6 +33,7 @@ public class VideoPlayer extends AppCompatActivity {
     static Video video;
     ProgressDialog pDialog;
     VideoView videoview;
+    //StretchVideoView sfv;
     ImageButton favoButton;
     String isFav = "false";
     static boolean run = true;
@@ -66,7 +67,8 @@ public class VideoPlayer extends AppCompatActivity {
 
             } else {
                 Log.d("test", "wp");
-                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,500));
+
                 exitFullScreen.setVisibility(View.GONE);
                 fullScreen.setVisibility(View.VISIBLE);
             }
@@ -119,7 +121,7 @@ public class VideoPlayer extends AppCompatActivity {
             // videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
             Toast.makeText(this, "full screen", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,500));
             exitFullScreen.setVisibility(View.GONE);
             fullScreen.setVisibility(View.VISIBLE);
            // Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
@@ -129,7 +131,9 @@ public class VideoPlayer extends AppCompatActivity {
     void inst(){
          v = video;
         // Find your VideoView in your video_main.xml layout
-        videoview = (VideoView) findViewById(R.id.VideoView);
+        videoview =(VideoView) findViewById(R.id.VideoView);
+
+
         //videoview.setMinimumHeight(400);
         // Execute StreamVideo AsyncTask
         favoButton = (ImageButton) findViewById(R.id.fav_button);
