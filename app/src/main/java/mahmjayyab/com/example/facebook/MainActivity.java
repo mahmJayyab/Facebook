@@ -158,17 +158,13 @@ public class MainActivity extends Fragment
 
 
     public void add10() {
-        List<Integer> repeated = new ArrayList<>();
+
 
         for(Video v : videos) {
                 Log.d("rrrr",v.getTitle());
         }
         Log.d("rrrr","----------------------------------------------------------------------");
-        /*for (Integer v : repeated)
-        {
-            Log.d("qqqq",v+"");
-            videos.remove(v.intValue());
-        }*/
+
         Log.d("tttt", lastIndex + "::" + videos.size());
         int max = Math.min(lastIndex + 10, videos.size());
         Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
@@ -176,37 +172,8 @@ public class MainActivity extends Fragment
             Log.d("asd", "ADD VIDEO INDEX " + i + ":" + videos.get(i).getTitle());
             visibleVideos.add(videos.get(i));
         }
-        /*List<Integer> repeated = new ArrayList<>();
 
-        for(Video v : allvideos) {
-            int index =0;
-            for (Video vd : allvideos) {
-                if(vd.getId().equals(v.getId()))
-                {
-                    if (index ==1)
-                    {
-                        repeated.add(allvideos.indexOf(vd));
-
-                    }
-                    else index++;
-                }
-            }
-        }
-
-        for (Integer v : repeated)
-        {
-            Log.d("qqqq",v+"");
-            allvideos.remove(v.intValue());
-        }*/
-        //Log.d("tttt",allvideos.size()+"       "+max + "         "+repeated.size());
-        //deletedItems += repeated.size();
-        /*for(int i=lastIndex;i< max;i++)
-        {
-            if(i < (max - deletedItems))
-                visibleVideos.add(allvideos.get(i));
-        }*/
-        //Log.d("asd", "TOTAL VISABLE:" + visibleVideos.size());
-
+        Log.d("llll",videos.size()+"        "+lastIndex);
         lastIndex = Math.min(lastIndex + 10, videos.size());
         if (lastIndex == videos.size()) {
             getVideos();
@@ -353,7 +320,7 @@ public class MainActivity extends Fragment
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                /*Collections.sort(videos, new Comparator<Video>() {
+               /* Collections.sort(videos, new Comparator<Video>() {
                     @Override
                     public int compare(Video video2, Video video1) {
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
@@ -369,23 +336,7 @@ public class MainActivity extends Fragment
         //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
     }
 
- /*   @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }*/
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
-        return true;
-    }
-*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
