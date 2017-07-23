@@ -92,10 +92,15 @@ public class MainActivity extends Fragment
             // show message
 
             allPages.add("MEQBAS");
+            allPages.add("ajplusarabi");
+            isSupscripe.add(true);
             isSupscripe.add(true);
             links.add("MEQBAS");
+            links.add("ajplusarabi");
             myDb.insertData_Pages("مقبس - Meqbas","true","https://graph.facebook.com/1860629474208112/picture?type=large"
                     ,"https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/17903377_1861123910825335_76517357315002598_n.jpg?oh=688a68958a7f9f7355d4fcc3144e1adb&oe=59FD64D2","MEQBAS");
+            myDb.insertData_Pages("عربي +AJ","true","https://graph.facebook.com/812386155471598/picture?type=large"
+                    ,"https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/14939545_1222073971169479_7736046938561748117_o.jpg?oh=5c0655e4130343354a3825c2d97cc368&oe=59F25131","ajplusarabi");
             //myDb.insertData("ajplusarabi","true");
            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
@@ -260,12 +265,12 @@ public class MainActivity extends Fragment
                             String page_pic_id = js.getJSONObject("from").getString("id");
                             String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
                             video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
+
                             videos.add(video);
                         }
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
                         String idPic = jsPageName.getString("id");
 
-                        String pageName_Orgin = jsPageName.getString("name");
                         pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                         pageCove= jsPageName.getJSONObject("cover").getString("source");
                         Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
@@ -275,11 +280,11 @@ public class MainActivity extends Fragment
 
                         //myDb.deleteData_P(link,DatabaseHelper.TABLE_NAME);
                         //myDb.insertData_Pages(link,"true",pagePic,pageCove,pageName_Orgin);
-                        res.moveToPosition(0);
+                       /* res.moveToPosition(0);
                         while (res.moveToNext()) {
                             Log.d("ccc",idConnt+""+"  id = "+res.getString(0)+" page pic "+res.getString(3)
                                    + " page name "+res.getString(5));
-                        }
+                        }*/
                         idConnt++;
                         // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 

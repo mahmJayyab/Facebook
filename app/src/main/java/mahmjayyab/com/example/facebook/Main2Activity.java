@@ -96,7 +96,10 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        finish();
+        Log.d("ttt","OnPack");
+
+        this.finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
 
     }
 
