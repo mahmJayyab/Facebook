@@ -41,6 +41,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends Fragment
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +74,7 @@ public class MainActivity extends Fragment
     static AccessToken token;
     boolean isClosed = false;
     static Cursor res;
+    int deletedItems = 0;
     public static LinkedList<Pages> subPages = new LinkedList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -152,22 +154,66 @@ public class MainActivity extends Fragment
         super.onStart();
         Log.d("asd", "startMethod");
     }
+    ArrayList<Video> allvideos = new ArrayList<>();
+
 
     public void add10() {
-        Log.d("asd", lastIndex + "::" + videos.size());
+        List<Integer> repeated = new ArrayList<>();
+
+        for(Video v : videos) {
+                Log.d("rrrr",v.getTitle());
+        }
+        Log.d("rrrr","----------------------------------------------------------------------");
+        /*for (Integer v : repeated)
+        {
+            Log.d("qqqq",v+"");
+            videos.remove(v.intValue());
+        }*/
+        Log.d("tttt", lastIndex + "::" + videos.size());
         int max = Math.min(lastIndex + 10, videos.size());
         Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
         for (int i = lastIndex; i < max; i++) {
             Log.d("asd", "ADD VIDEO INDEX " + i + ":" + videos.get(i).getTitle());
             visibleVideos.add(videos.get(i));
         }
-        Log.d("asd", "TOTAL VISABLE:" + visibleVideos.size());
+        /*List<Integer> repeated = new ArrayList<>();
+
+        for(Video v : allvideos) {
+            int index =0;
+            for (Video vd : allvideos) {
+                if(vd.getId().equals(v.getId()))
+                {
+                    if (index ==1)
+                    {
+                        repeated.add(allvideos.indexOf(vd));
+
+                    }
+                    else index++;
+                }
+            }
+        }
+
+        for (Integer v : repeated)
+        {
+            Log.d("qqqq",v+"");
+            allvideos.remove(v.intValue());
+        }*/
+        //Log.d("tttt",allvideos.size()+"       "+max + "         "+repeated.size());
+        //deletedItems += repeated.size();
+        /*for(int i=lastIndex;i< max;i++)
+        {
+            if(i < (max - deletedItems))
+                visibleVideos.add(allvideos.get(i));
+        }*/
+        //Log.d("asd", "TOTAL VISABLE:" + visibleVideos.size());
+
         lastIndex = Math.min(lastIndex + 10, videos.size());
         if (lastIndex == videos.size()) {
             getVideos();
             Log.d("asd", "getFUCKINGnew");
         }
     }
+
 
     public void initialize() {
         //Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
@@ -307,12 +353,13 @@ public class MainActivity extends Fragment
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                Collections.sort(videos, new Comparator<Video>() {
+                /*Collections.sort(videos, new Comparator<Video>() {
                     @Override
                     public int compare(Video video2, Video video1) {
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
-                });
+                });*/
+
                 //visibleVideos.addAll( videos);
                 add10();
             }
