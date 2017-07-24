@@ -2,6 +2,7 @@ package mahmjayyab.com.example.facebook;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +45,12 @@ public class VideoPlayer extends AppCompatActivity {
     ProgressBar progressBar;
     ImageButton fullScreen;
     ImageButton exitFullScreen;
+    ImageButton smallVideoBtn;
     Video v;
-
+    Uri videoLink;
+    int height;
+    static int postion;
+    static boolean setPos = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,10 @@ public class VideoPlayer extends AppCompatActivity {
         linearLayout= (LinearLayout) findViewById(R.id.extra);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         inst();
-
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
 
 
 
@@ -67,7 +76,7 @@ public class VideoPlayer extends AppCompatActivity {
 
             } else {
                 Log.d("test", "wp");
-                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,500));
+                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height/3));
 
                 exitFullScreen.setVisibility(View.GONE);
                 fullScreen.setVisibility(View.VISIBLE);
@@ -85,6 +94,10 @@ public class VideoPlayer extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             videoview.requestFocus();
+            if(setPos){
+                videoview.seekTo(postion);
+                setPos = false;
+            }
             videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 // Close the progress bar and play the video
                 public void onPrepared(MediaPlayer mp) {
@@ -121,7 +134,7 @@ public class VideoPlayer extends AppCompatActivity {
             // videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
             Toast.makeText(this, "full screen", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,500));
+            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height/3 ));
             exitFullScreen.setVisibility(View.GONE);
             fullScreen.setVisibility(View.VISIBLE);
            // Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
@@ -139,6 +152,7 @@ public class VideoPlayer extends AppCompatActivity {
         favoButton = (ImageButton) findViewById(R.id.fav_button);
         fullScreen = (ImageButton) findViewById(R.id.full_button);
         exitFullScreen = (ImageButton) findViewById(R.id.notfull_button);
+        smallVideoBtn = (ImageButton) findViewById(R.id.smallVideo_button);
         // Create a progressbar
         pDialog = new ProgressDialog(VideoPlayer.this);
         relativeLayout =(RelativeLayout) findViewById(R.id.relativeLayout1);
@@ -171,9 +185,9 @@ public class VideoPlayer extends AppCompatActivity {
             mediacontroller.setAnchorView(videoview);
             // Get the URL from String VideoURL
 
-            Uri video = Uri.parse(v.getSource());
+            videoLink = Uri.parse(v.getSource());
             videoview.setMediaController(mediacontroller);
-            videoview.setVideoURI(video);
+            videoview.setVideoURI(videoLink );
 
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
@@ -216,5 +230,20 @@ public class VideoPlayer extends AppCompatActivity {
                 fullScreen.setVisibility(View.VISIBLE);
             }
         });
+        smallVideoBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                //Intent intent = new Intent(VideoPlayer.this,Main2Activity.class);
+                //startActivity(intent);
+                int pos =videoview.getCurrentPosition();
+                Main2Activity.playSmallVideo(videoLink ,pos,video);
+
+                onBackPressed();
+
+            }
+        });
     }
+
+
 }

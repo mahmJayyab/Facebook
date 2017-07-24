@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +24,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.VideoView;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -42,6 +51,14 @@ public class Main2Activity extends AppCompatActivity {
     public static FloatingActionButton clearFavorite;
     public static FloatingActionButton addPage;
     public static FragmentManager fm;
+    public static VideoView smallVideo;
+    public static RelativeLayout smallVideoLayout;
+    static ProgressBar videoProgressBar;
+    static Uri vLink;
+    static MediaController mediacontroller;
+    static Context myContext;
+    static Video videoForPlay;
+    ImageButton closeBtn;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -52,14 +69,18 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main2);
+        myContext = Main2Activity.this;
          clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
         clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
         addPage = (FloatingActionButton) findViewById(R.id.add);
         clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
         clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
         addPage.setVisibility(View.GONE);
+        smallVideo = (VideoView)findViewById(R.id.smallVideo);
+        smallVideoLayout =(RelativeLayout)findViewById(R.id.smallVideoLayout);
+        videoProgressBar = (ProgressBar)findViewById(R.id.videoProgressBar);
+        closeBtn =(ImageButton)findViewById(R.id.close_button);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -81,6 +102,36 @@ public class Main2Activity extends AppCompatActivity {
         t = tabLayout;
         fm = this.getSupportFragmentManager();
 
+        smallVideoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                smallVideoLayout.setVisibility(View.GONE);
+                VideoPlayer.video = videoForPlay;
+                Intent myIntent = new Intent(Main2Activity.this, VideoPlayer.class);
+                int p =smallVideo.getCurrentPosition();
+                VideoPlayer.postion =p;
+                VideoPlayer.setPos= true;
+                smallVideo.setVisibility(View.GONE);
+                startActivity(myIntent);
+            }
+        });
+        smallVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // not playVideo
+                // playVideo();
+                smallVideoLayout.setVisibility(View.GONE);
+                smallVideo.setVisibility(View.GONE);
+            }
+        });
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                smallVideoLayout.setVisibility(View.GONE);
+                smallVideo.setVisibility(View.GONE);
+            }
+        });
 
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +267,51 @@ public class Main2Activity extends AppCompatActivity {
             }
             return null;
         }
+    }
+    public  static void playSmallVideo(Uri videoLink ,int pos ,Video video){
+        //smallVideo.setLayoutParams(new RelativeLayout.LayoutParams(600,300));
+        videoForPlay = video;
+        smallVideoLayout.setVisibility(View.VISIBLE);
+        smallVideo.setVisibility(View.VISIBLE);
+        // Main2Activity.smallVideo = videoview;
+        try {
+            // Start the MediaController
+            mediacontroller = new MediaController(
+                    myContext);
+            mediacontroller.setAnchorView(Main2Activity.smallVideo);
+            // Get the URL from String VideoURL
+            vLink = videoLink;
+            smallVideo.setMediaController(Main2Activity.mediacontroller);
+            smallVideo.setVideoURI(Main2Activity.vLink);
+
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+
+        smallVideo.requestFocus();
+        smallVideo.seekTo(pos);
+        smallVideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            // Close the progress bar and play the video
+            public void onPrepared(MediaPlayer mp) {
+                //pDialog.dismiss();
+                // progressBar.setVisibility(View.GONE);
+                videoProgressBar.setVisibility(View.GONE);
+                smallVideo.start();
+                mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
+                            videoProgressBar.setVisibility(View.VISIBLE);
+                        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
+                            videoProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                });
+
+
+            }
+        });
     }
 }
 

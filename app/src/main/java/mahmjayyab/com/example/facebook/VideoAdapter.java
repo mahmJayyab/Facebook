@@ -69,6 +69,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 //TODO:ADD your Intent;
+                Main2Activity.smallVideoLayout.setVisibility(View.GONE);
+                Main2Activity.smallVideo.setVisibility(View.GONE);
                 VideoPlayer.video = video;
                 boolean done = true;
                 Log.d("aa",HistoryActivity.videos+" Addpter");

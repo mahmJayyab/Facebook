@@ -20,7 +20,9 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="1.0">
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
@@ -79,6 +81,18 @@
                 android:background="@null"
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_fullscreen_exit_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/smallVideo_button"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
+                android:layout_columnSpan="3"
+                android:layout_gravity="right"
+                android:background="@null"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_photo_size_select_small_black_24dp"
+                android:layout_below="@+id/full_button"
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
         <LinearLayout

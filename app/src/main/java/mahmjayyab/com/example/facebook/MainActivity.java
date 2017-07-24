@@ -3,6 +3,8 @@ package mahmjayyab.com.example.facebook;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
@@ -173,11 +176,12 @@ public class MainActivity extends Fragment
             visibleVideos.add(videos.get(i));
         }
 
-        Log.d("llll",videos.size()+"        "+lastIndex);
+        Log.d("mmmm",videos.size()+"        "+lastIndex);
         lastIndex = Math.min(lastIndex + 10, videos.size());
         if (lastIndex == videos.size()) {
             getVideos();
             Log.d("asd", "getFUCKINGnew");
+            Log.d("mmmm","sucss");
         }
     }
 
@@ -222,8 +226,9 @@ public class MainActivity extends Fragment
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemIndex < lastVisibleItem) {
-                    Log.d("asd", totalItemCount + ":" + lastVisibleItem);
+                    Log.d("mmmm", totalItemCount + ":" + lastVisibleItem);
                     if (totalItemCount - 1 == lastVisibleItem) {
+                        Log.d("mmmm","Added");
                         add10();
                     }
                     lastVisibleItemIndex = lastVisibleItem;
@@ -320,12 +325,12 @@ public class MainActivity extends Fragment
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
-               /* Collections.sort(videos, new Comparator<Video>() {
+                Collections.sort(videos, new Comparator<Video>() {
                     @Override
                     public int compare(Video video2, Video video1) {
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
-                });*/
+                });
 
                 //visibleVideos.addAll( videos);
                 add10();
@@ -405,4 +410,5 @@ public class MainActivity extends Fragment
                Main2Activity.addPage.setVisibility(View.GONE);
            }
        }
+
 }
