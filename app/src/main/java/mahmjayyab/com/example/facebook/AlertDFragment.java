@@ -32,22 +32,13 @@ public class AlertDFragment extends DialogFragment {
         input.setHint("https://www.facebook.com/PageName");
         input.setText("https://www.facebook.com/");
         return new AlertDialog.Builder(getActivity())
-                // Set Dialog Icon
-                //.setIcon(R.drawable.side_nav_bar)
-                // Set Dialog Title
+
                 .setTitle("ِAdd Facebook Page Link")
                 .setView(input)
-                // Set Dialog Message
-                //.setMessage("Alert DialogFragment Tutorial")
 
-
-
-
-                // Positive button
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String link = input.getText().toString();
-                        // Do something else
                         if(link.startsWith("https://www.facebook.com")||link.startsWith("https://m.facebook.com")||link.startsWith("www.facebook.com")){
                             String p = link.substring(link.indexOf(".com/")+5);
                             String temp = "";
@@ -66,34 +57,20 @@ public class AlertDFragment extends DialogFragment {
                                 }
                             }
                             Log.d("yyy",temp);
-                           /* if(b) {
-                                pageName = temp;
-                                MainActivity.allPages.add(temp);
-                                MainActivity.isSupscripe.add(true);
-                                MainActivity.myDb.insertData(temp, "true");
-                            }
-                            else{
-                                MainActivity.myDb.updateData(temp,"true");
-                            }*/
                            pageName = temp;
                             Calendar cal = Calendar.getInstance();
                             afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}&since=2017-07-01",
+                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}&since=2017-05-01",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
-                                            // Insert your code here
-                                            //Log.d("yyy",pageName+"/videos?fields=from{name}"+afterQ);
                                             try {
-                                                //JSONObject jsPageName =  response.getJSONObject();
                                                 JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                                                 String ms = "Please reduce the amount of data you're asking for, then retry your request";
                                                 Log.d("yyy",jsPageName+"   ");
-                                                //Log.d("yyy",jsPageName.getString("videos"));
                                                 if( jsPageName.has("name")|| !jsPageName.getJSONArray("data").isNull(0)  ){
                                                     if(b) {
-
                                                         MainActivity.allPages.add(pageName);
                                                         MainActivity.isSupscripe.add(true);
                                                         String cover = jsPageName.getJSONObject("cover").getString("source");
@@ -101,8 +78,6 @@ public class AlertDFragment extends DialogFragment {
                                                         String name = jsPageName.getString("name");
                                                         String pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                                                         MainActivity.myDb.insertData_Pages(name, "true",pagePic,cover,pageName);
-                                                       /* Toast.makeText(AlertDFragment,
-                                                                "Your Message", Toast.LENGTH_LONG).show();*/
                                                     }
                                                     else{
                                                         MainActivity.myDb.updateData(pageName,"true");
@@ -118,23 +93,16 @@ public class AlertDFragment extends DialogFragment {
                                             }
                                         }
                                     });
-
                             request.executeAsync();
-
                         }
-
-
                     }
                 })
-
                 // Negative Button
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,	int which) {
                         // Do something else
                     }
                 }).create();
-
-
     }
 }
 

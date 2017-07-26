@@ -36,39 +36,11 @@ public class HistoryActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //super.onCreate(bundle);
-        //setContentView(R.layout.activity_history);
 
-        //Log.d("accc","AAAAAAAAAAAAA");
         View rootView = inflater.inflate(R.layout.activity_history, container, false);
         Log.d("ggg","History");
         Log.d("accc",rootView+"");
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        //this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.setDrawerListener(toggle);
-        // toggle.syncState();
-
-        //Clear history
-       /* FloatingActionButton clear = (FloatingActionButton) rootView.findViewById(R.id.clear);
-
-        clear.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                visibleVideos.clear();
-                videos.clear();
-               // VideoAdapter.hv.clear();
-                MainActivity.myDb.deleteDataAll(DatabaseHelper.TABLE_HISTORY);
-                mRecyclerView.setAdapter(historyAdapter);
-
-                // I did it haha
-
-            }
-        });*/
 
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
@@ -83,18 +55,6 @@ public class HistoryActivity extends Fragment {
         historyAdapter = new HistoryAdapter(videos, rootView.getContext());
         mRecyclerView.setAdapter(historyAdapter);
 
-       /* mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItemCount = mLayoutManager.getItemCount();
-                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-                Log.d("asd", totalItemCount + ":" + lastVisibleItem);
-                if (totalItemCount - 1 == lastVisibleItem) {
-                    add10();
-                }
-            }
-        });*/
 
         //When watch video more than one time >> up to the history one time
         existIds.add(0,"non");
@@ -102,13 +62,6 @@ public class HistoryActivity extends Fragment {
             Log.d("asd","NullHis");
             progressBar.setVisibility(View.GONE);
         }
-       /* for (Video video : VideoAdapter.hv) {
-
-                videos.add(video);
-            }*/
-        // existIds.add(video.getId());
-
-        //add10();
         if(!videos.isEmpty()) {
             progressBar.setVisibility(View.GONE);
             emptyText.setVisibility(View.GONE);
@@ -118,16 +71,6 @@ public class HistoryActivity extends Fragment {
         getVideos();
         return rootView;
     }
-
-
-   /* public void add10() {
-        Log.d("asd", lastIndex + "::" + videos.size());
-        int max = Math.min(lastIndex +15 , videos.size());
-        for (int i = lastIndex; i < max; i++) {
-            visibleVideos.add(videos.get(i));
-        }
-        lastIndex += 15;
-    }*/
 
 
     public void getVideos()

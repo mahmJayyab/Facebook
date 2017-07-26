@@ -16,6 +16,7 @@ public class Video  {
     private String favorite = "false";
     private String page_pic = null;
     private String image;
+    public  int pos;
 
     public Video(String source, String description, String title, String id, String picture,
                  String created_date, String summary, String pageName){

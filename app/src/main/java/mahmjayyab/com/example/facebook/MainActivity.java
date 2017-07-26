@@ -3,8 +3,6 @@ package mahmjayyab.com.example.facebook;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -24,8 +22,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.VideoView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -64,7 +62,7 @@ public class MainActivity extends Fragment
     ArrayList<Video> videos = new ArrayList();
     ArrayList<Video> visibleVideos = new ArrayList<>();
     static ArrayList<Pages> pages = new ArrayList<>();
-    int lastIndex = 0;
+    int lastIndex = 1;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
     Context cont;
@@ -157,54 +155,45 @@ public class MainActivity extends Fragment
         super.onStart();
         Log.d("asd", "startMethod");
     }
-    ArrayList<Video> allvideos = new ArrayList<>();
-
+    int lastSize = 0;
+    boolean isFinished;
 
     public void add10() {
 
 
-        for(Video v : videos) {
-                Log.d("rrrr",v.getTitle());
-        }
-        Log.d("rrrr","----------------------------------------------------------------------");
-
-        Log.d("tttt", lastIndex + "::" + videos.size());
-        int max = Math.min(lastIndex + 10, videos.size());
+        int max = Math.min(lastIndex + 9, videos.size());
+        Log.d("tttt", lastIndex + "::" + videos.size() +"::" + max);
         Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
+        boolean isEntered = false;
+
         for (int i = lastIndex; i < max; i++) {
             Log.d("asd", "ADD VIDEO INDEX " + i + ":" + videos.get(i).getTitle());
             visibleVideos.add(videos.get(i));
+            Log.d("ppp", videos.get(i).pos+"   "+videos.get(i).getTitle());
+            isEntered = true;
         }
 
-        Log.d("mmmm",videos.size()+"        "+lastIndex);
-        lastIndex = Math.min(lastIndex + 10, videos.size());
-        if (lastIndex == videos.size()) {
+        Log.d("fgh","IsEntered: " + isEntered);
+        lastIndex = Math.min(lastIndex + 9, videos.size());
+        if(lastIndex == videos.size() && !isEntered && !isFinished)
+        {
+            Log.d("tttt","EQ");
+            getVideos();
+        }
+        lastSize = videos.size();
+        /*if (lastIndex == videos.size()) {
+            //pos = lastIndex;
+            //Log.d("ffff",pos+"    " +videos.size());
+            Log.d("llll",videos.size()+"        "+lastIndex);
+            lastIndex += 1;
             getVideos();
             Log.d("asd", "getFUCKINGnew");
-            Log.d("mmmm","sucss");
-        }
+        }*/
     }
 
 
     public void initialize() {
-        //Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        /*rootView.setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                 AlertDFragment alertdFragment = new AlertDFragment();
-                alertdFragment.show(fm, "Alert Dialog Fragment");
-
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();*/
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
@@ -226,9 +215,9 @@ public class MainActivity extends Fragment
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemIndex < lastVisibleItem) {
-                    Log.d("mmmm", totalItemCount + ":" + lastVisibleItem);
+                    Log.d("asd", totalItemCount + ":" + lastVisibleItem);
                     if (totalItemCount - 1 == lastVisibleItem) {
-                        Log.d("mmmm","Added");
+                        Log.d("fgh","1010");
                         add10();
                     }
                     lastVisibleItemIndex = lastVisibleItem;
@@ -237,6 +226,7 @@ public class MainActivity extends Fragment
         });
     }
 
+    int pos = 0;
     public void getVideos() {
         if (links.isEmpty()) return;
          token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
@@ -263,6 +253,7 @@ public class MainActivity extends Fragment
                     , null, HttpMethod.GET, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse response) {
+
                     Video video;
                     String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
                     int index=0;
@@ -270,7 +261,6 @@ public class MainActivity extends Fragment
                     try {
                         JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
                          pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
-
                         for (int i = 1; i < response.getJSONObject().getJSONArray("data").length(); i++) {
                             JSONObject js = response.getJSONObject().getJSONArray("data").getJSONObject(i);
                             picture = (js.has("picture") && !js.isNull("picture")) ? js.getString("picture") : "";
@@ -283,8 +273,9 @@ public class MainActivity extends Fragment
                             String page_pic_id = js.getJSONObject("from").getString("id");
                             String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
                             video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
-
+                            video.pos++;
                             videos.add(video);
+
                         }
                         linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
                         String idPic = jsPageName.getString("id");
@@ -325,15 +316,32 @@ public class MainActivity extends Fragment
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                Collections.sort(videos, new Comparator<Video>() {
+                Log.d("vvvv",link);
+                /*ArrayList<Video> sortItems = new ArrayList<Video>();
+                sortItems.clear();
+                for(int i=pos;i<videos.size();i++)
+                    sortItems.add(videos.get(i));
+                Collections.sort(sortItems, new Comparator<Video>() {
                     @Override
                     public int compare(Video video2, Video video1) {
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
                 });
 
+                for (int i=pos,j=0;i<videos.size();i++,j++)
+                {
+                    Log.d("iiii",sortItems.get(j).getTitle());
+                    videos.set(i,sortItems.get(j));
+                }*/
                 //visibleVideos.addAll( videos);
+
+                if(lastSize == videos.size())
+                    isFinished = true;
+                Log.d("fgh",isFinished+"");
                 add10();
+                //add10();
+
+
             }
         });
 
@@ -410,5 +418,4 @@ public class MainActivity extends Fragment
                Main2Activity.addPage.setVisibility(View.GONE);
            }
        }
-
 }
