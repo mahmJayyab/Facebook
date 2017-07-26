@@ -327,7 +327,7 @@ public class MainActivity extends Fragment
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
                 });
-
+                //
                 for (int i=pos,j=0;i<videos.size();i++,j++)
                 {
                     Log.d("iiii",sortItems.get(j).getTitle());
