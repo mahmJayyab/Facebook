@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,13 +32,14 @@ import java.util.LinkedList;
 
 public class SupscripeActivity extends Fragment {
     public static LinkedList<Pages> pages = new LinkedList();
-    SupscripeAdapter historyAdapter;
+    static SupscripeAdapter historyAdapter;
     LinearLayoutManager mLayoutManager;
-    RecyclerView mRecyclerView;
+    static RecyclerView mRecyclerView;
     View rootView;
     //FragmentManager fm;
     Context cont;
     static ProgressBar progressBar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,6 +139,12 @@ public class SupscripeActivity extends Fragment {
                 }
             });
         }
+    }
+
+    static void refreshPages(){
+        mRecyclerView.setAdapter(historyAdapter);
+
+
     }
 
 }

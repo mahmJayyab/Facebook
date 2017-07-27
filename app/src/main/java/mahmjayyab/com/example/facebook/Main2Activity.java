@@ -17,6 +17,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +32,8 @@ import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
+
+import java.net.InetAddress;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -70,6 +73,7 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main2);
+        Log.d("jayab",isNetworkConnected()+"");
         myContext = Main2Activity.this;
          clearHistory = (FloatingActionButton) findViewById(R.id.clearHistory);
         clearFavorite = (FloatingActionButton) findViewById(R.id.clearFavorite);
@@ -186,6 +190,11 @@ public class Main2Activity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+
+
+            Log.d("haha","referch");
+            //tab1 = new MainActivity();
 
             return true;
         }
@@ -312,6 +321,23 @@ public class Main2Activity extends AppCompatActivity {
 
             }
         });
+    }
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("https://www.google.com"); //You can replace it with your name
+            Log.d("jayab",ipAddr.toString());
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            Log.d("jayab",e.toString());
+            return false;
+        }
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
 

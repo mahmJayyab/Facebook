@@ -75,11 +75,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
                 Main2Activity.smallVideo.setVisibility(View.GONE);
                 VideoPlayer.video = video;
                 boolean done = true;
-                Log.d("aa",HistoryActivity.videos+" Addpter");
 
+                Log.d("aa",video.getPage_pic()+"  "+video.getLikes()+"  "+"vdieo Addpter");
                 //How !!
-                MainActivity.myDb.deleteData(video.getTitle(),DatabaseHelper.TABLE_HISTORY);
-                MainActivity.myDb.insertData(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture());
+                MainActivity.myDb.deleteData(video.getPicture(),DatabaseHelper.TABLE_HISTORY);
+                MainActivity.myDb.insertData(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture(),video.getFavorite(),video.getPage_pic(),
+                        video.getLikes(),video.getDescription());
 
 
                 Intent myIntent = new Intent(mContext, VideoPlayer.class);

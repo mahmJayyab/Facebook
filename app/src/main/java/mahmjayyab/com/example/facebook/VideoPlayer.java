@@ -51,12 +51,13 @@ public class VideoPlayer extends AppCompatActivity {
     int height;
     static int postion;
     static boolean setPos = false;
+    boolean videoEnd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-
+        videoEnd = false;
         linearLayout= (LinearLayout) findViewById(R.id.extra);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         inst();
@@ -128,7 +129,7 @@ public class VideoPlayer extends AppCompatActivity {
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-           relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+           relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
             exitFullScreen.setVisibility(View.VISIBLE);
             fullScreen.setVisibility(View.GONE);
             // videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
@@ -169,7 +170,7 @@ public class VideoPlayer extends AppCompatActivity {
         description.setText(video.getDescription());
         likes.setText("Likes: " + video.getLikes());
 
-        Cursor res = MainActivity.myDb.getData(DatabaseHelper.TABLE_FAV, video.getTitle());
+        Cursor res = MainActivity.myDb.getData(DatabaseHelper.TABLE_FAV, video.getPicture());
         while (res.moveToNext()) {
             isFav = res.getString(5);
         }
@@ -198,10 +199,11 @@ public class VideoPlayer extends AppCompatActivity {
         favoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.myDb.deleteData(video.getTitle(), DatabaseHelper.TABLE_FAV);
+                MainActivity.myDb.deleteData(video.getPicture(), DatabaseHelper.TABLE_FAV);
                 if (isFav.equals("false")) {
                     isFav = "true";
-                    MainActivity.myDb.insertDataFave(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture(), "true");
+                    MainActivity.myDb.insertDataFave(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture(), "true",video.getPage_pic(),
+                            video.getLikes(),video.getDescription());
                     favoButton.setImageResource(R.drawable.ic_star_black_24dp);
 
                 } else {
@@ -236,13 +238,31 @@ public class VideoPlayer extends AppCompatActivity {
 
                 //Intent intent = new Intent(VideoPlayer.this,Main2Activity.class);
                 //startActivity(intent);
-                int pos =videoview.getCurrentPosition();
-                Main2Activity.playSmallVideo(videoLink ,pos,video);
 
+                int pos =videoview.getCurrentPosition();
+                Main2Activity.playSmallVideo(videoLink ,pos+1000,video);
                 onBackPressed();
 
             }
         });
+        videoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // not playVideo
+                // playVideo();
+               videoEnd = true;
+            }
+        });
+    }
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        if(!videoEnd) {
+            int pos = videoview.getCurrentPosition();
+            Main2Activity.playSmallVideo(videoLink, pos + 1000, video);
+        }
     }
 
 

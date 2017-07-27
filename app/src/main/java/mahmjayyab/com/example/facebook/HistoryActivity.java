@@ -82,11 +82,14 @@ public class HistoryActivity extends Fragment {
             String title = res1.getString(2);
             String source = res1.getString(3);
             String picture = res1.getString(4);
+            String fav = res1.getString(5);
+            String pagePic = res1.getString(6);
+            String likes = res1.getString(7);
+            String descripyion = res1.getString(8);
             Log.d("asd", pageName + "\t" + title);
-            Video video = new Video(pageName, title, source, picture);
+            Video video = new Video(pageName, title, source, picture,fav ,pagePic ,likes,descripyion);
             videos.addFirst(video);
-            Log.d("aa", videos + " Main");
-            Log.d("aff", video.getPageName() + video.getTitle());
+            Log.d("aa",video.getTitle()+"    "+ video.getPage_pic() +"   "+ video.getLikes()+"   "+ "History Activity");
         }
         historyAdapter.notifyDataSetChanged();
 

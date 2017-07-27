@@ -65,7 +65,8 @@ public class MainActivity extends Fragment
     int lastIndex = 1;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
-    Context cont;
+    ProgressBar progressBarDown;
+    static Context cont;
     View rootView;
     int idConnt = 1;
     String link;
@@ -77,6 +78,7 @@ public class MainActivity extends Fragment
     static Cursor res;
     int deletedItems = 0;
     public static LinkedList<Pages> subPages = new LinkedList<>();
+    static boolean firstTime = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -139,8 +141,12 @@ public class MainActivity extends Fragment
             String title = res1.getString(2);
             String source = res1.getString(3);
             String picture = res1.getString(4);
+            String fav = res1.getString(5);
+            String pagePic = res1.getString(6);
+            String likes = res1.getString(7);
+            String descripyion = res1.getString(8);
             Log.d("cccc", pageName + "\t" + title);
-            Video video = new Video(pageName,title,source,picture);
+            Video video = new Video(pageName,title,source,picture,fav,pagePic ,likes,descripyion);
             HistoryActivity.videos.addFirst(video);
             Log.d("aa",HistoryActivity.videos+" Main");
             Log.d("aa",video.getPageName()+"556565");
@@ -178,6 +184,7 @@ public class MainActivity extends Fragment
         if(lastIndex == videos.size() && !isEntered && !isFinished)
         {
             Log.d("tttt","EQ");
+            progressBarDown.setVisibility(View.VISIBLE);
             getVideos();
         }
         lastSize = videos.size();
@@ -197,6 +204,7 @@ public class MainActivity extends Fragment
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        progressBarDown = (ProgressBar) rootView.findViewById(R.id.progressBar2);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -205,6 +213,10 @@ public class MainActivity extends Fragment
 
         mAdapter = new VideoAdapter(visibleVideos, cont);
         mRecyclerView.setAdapter(mAdapter);
+        if(firstTime){
+            progressBar.setVisibility(View.VISIBLE);
+            firstTime = false;
+        }
 
        // NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
        // navigationView.setNavigationItemSelectedListener(this);
@@ -305,6 +317,7 @@ public class MainActivity extends Fragment
                         public void run() {
                             mAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
+                            progressBarDown.setVisibility(View.GONE);
                         }
                     });
 
@@ -418,4 +431,5 @@ public class MainActivity extends Fragment
                Main2Activity.addPage.setVisibility(View.GONE);
            }
        }
+
 }

@@ -18,7 +18,7 @@ public class Video  {
     private String image;
     public  int pos;
 
-    public Video(String source, String description, String title, String id, String picture,
+   /* public Video(String source, String description, String title, String id, String picture,
                  String created_date, String summary, String pageName){
         this.setSource(source);
         this.setDescription(description);
@@ -29,7 +29,8 @@ public class Video  {
         this.setLikes(summary);
         this.setPageName(pageName);
 
-    }
+    }*/
+
     public Video(String source, String description, String title, String id, String picture,
                  String created_date, String likes, String pageName, String favorite, String page_pic) {
         this.setSource(source);
@@ -44,15 +45,18 @@ public class Video  {
         this.setPage_pic(page_pic);
     }
 
-    public Video(String pageName, String title, String source, String picture ){
+    public Video(String pageName, String title, String source, String picture,String fav ,String pagePic,String likes,String description){
         this.setSource(source);
-        //this.setDescription(description);
+        this.setDescription(description);
         this.setTitle(title);
         //this.setId(id);
         this.setPicture(picture);
         //this.setCreated_date(created_date);
        // this.setSummary(summary);
         this.setPageName(pageName);
+        this.favorite = fav;
+        this.page_pic = pagePic;
+        this.likes = likes;
     }
 
     public String getSource() {

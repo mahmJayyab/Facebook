@@ -3,6 +3,7 @@ package mahmjayyab.com.example.facebook;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Main2Activity.smallVideoLayout.setVisibility(View.GONE);
+                Main2Activity.smallVideo.setVisibility(View.GONE);
+                VideoPlayer.video = video;
+
+                MainActivity.myDb.deleteData(video.getPicture(),DatabaseHelper.TABLE_HISTORY);
+                MainActivity.myDb.insertData(video.getPageName(), video.getTitle(), video.getSource(), video.getPicture(),video.getFavorite(),video.getPage_pic(),
+                        video.getLikes(),video.getDescription());
+
+                Intent myIntent = new Intent(mContext, VideoPlayer.class);
+
+                mContext.startActivity(myIntent);
 
             }
         });
