@@ -39,10 +39,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,8 +69,7 @@ public class MainActivity extends Fragment
     int lastIndex = 1;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
-    ProgressBar progressBarDown;
-    static Context cont;
+    Context cont;
     View rootView;
     int idConnt = 1;
     String link;
@@ -79,10 +80,9 @@ public class MainActivity extends Fragment
     boolean isClosed = false;
     static Cursor res;
     int deletedItems = 0;
-    public static LinkedList<Pages> subPages = new LinkedList<>();
-    static boolean firstTime = true;
     private boolean isUserScrolling = false;
     private boolean isListGoingUp = true;
+    public static LinkedList<Pages> subPages = new LinkedList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,8 +95,7 @@ public class MainActivity extends Fragment
         //creat database
         myDb=new DatabaseHelper(cont);
 
-        //creat cursor to read from database
-         res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
+        res = myDb.getAllData(DatabaseHelper.TABLE_NAME);        //creat cursor to read from database
 
         if(res.getCount() == 0) {
             // show message
@@ -112,7 +111,7 @@ public class MainActivity extends Fragment
             myDb.insertData_Pages("عربي +AJ","true","https://graph.facebook.com/812386155471598/picture?type=large"
                     ,"https://scontent.xx.fbcdn.net/v/t31.0-8/s720x720/14939545_1222073971169479_7736046938561748117_o.jpg?oh=5c0655e4130343354a3825c2d97cc368&oe=59F25131","ajplusarabi");
             //myDb.insertData("ajplusarabi","true");
-           // myDb.insertData("MEQBAS","true");
+            // myDb.insertData("MEQBAS","true");
             // myDb.insertData("ajplusarabi","true");
             Log.d("asd","Null");
             //res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
@@ -146,12 +145,8 @@ public class MainActivity extends Fragment
             String title = res1.getString(2);
             String source = res1.getString(3);
             String picture = res1.getString(4);
-            String fav = res1.getString(5);
-            String pagePic = res1.getString(6);
-            String likes = res1.getString(7);
-            String descripyion = res1.getString(8);
             Log.d("cccc", pageName + "\t" + title);
-            Video video = new Video(pageName,title,source,picture,fav,pagePic ,likes,descripyion);
+            Video video = new Video(pageName,title,source,picture);
             HistoryActivity.videos.addFirst(video);
             Log.d("aa",HistoryActivity.videos+" Main");
             Log.d("aa",video.getPageName()+"556565");
@@ -170,37 +165,25 @@ public class MainActivity extends Fragment
     boolean isFinished;
 
     public void add10() {
-
-        //
         int max = Math.min(lastIndex + 9, videos.size());
         Log.d("tttt", lastIndex + "::" + videos.size() +"::" + max);
         Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
         boolean isEntered = false;
-
         for (int i = lastIndex; i < max; i++) {
             Log.d("asd", "ADD VIDEO INDEX " + i + ":" + videos.get(i).getTitle());
             visibleVideos.add(videos.get(i));
             Log.d("ppp", videos.get(i).pos+"   "+videos.get(i).getTitle());
             isEntered = true;
         }
-
         Log.d("fgh","IsEntered: " + isEntered);
         lastIndex = Math.min(lastIndex + 9, videos.size());
         if(lastIndex == videos.size() && !isEntered && !isFinished)
         {
             Log.d("tttt","EQ");
-            progressBarDown.setVisibility(View.VISIBLE);
+
             getVideos();
         }
         lastSize = videos.size();
-        /*if (lastIndex == videos.size()) {
-            //pos = lastIndex;
-            //Log.d("ffff",pos+"    " +videos.size());
-            Log.d("llll",videos.size()+"        "+lastIndex);
-            lastIndex += 1;
-            getVideos();
-            Log.d("asd", "getFUCKINGnew");
-        }*/
     }
 
 
@@ -209,7 +192,6 @@ public class MainActivity extends Fragment
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-        progressBarDown = (ProgressBar) rootView.findViewById(R.id.progressBar2);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -218,13 +200,9 @@ public class MainActivity extends Fragment
 
         mAdapter = new VideoAdapter(visibleVideos, cont);
         mRecyclerView.setAdapter(mAdapter);
-        if(firstTime){
-            progressBar.setVisibility(View.VISIBLE);
-            firstTime = false;
-        }
 
-       // NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
-       // navigationView.setNavigationItemSelectedListener(this);
+        // NavigationView navigationView = (NavigationView) rootView.findViewById(R.id.nav_view);
+        // navigationView.setNavigationItemSelectedListener(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -251,7 +229,7 @@ public class MainActivity extends Fragment
                 }
                 //Log.d("asdasd",mLayoutManager.findLastCompletelyVisibleItemPosition()+"  "+"VisibleItemPosition");
                 //Log.d("asdasd",lastVisibleItemIndex+"  "+"lastVisibleItemIndex");
-             }
+            }
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -284,17 +262,15 @@ public class MainActivity extends Fragment
                 }
             }
         });
-
-
-
     }
 
     int pos = 0;
     public void getVideos() {
         if (links.isEmpty()) return;
-         token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
+        final ArrayList<Video> items = new ArrayList<>();
+        token = new AccessToken(getString(R.string.accesstoken), getString(R.string.appId), "128841827707620",
                 null, null, null, null, null);
-         batch = new GraphRequestBatch();
+        batch = new GraphRequestBatch();
         if (links.size() != linksPaging.size()) {
             linksPaging.clear();
             for (int i = 0; i < links.size(); i++) {
@@ -302,106 +278,106 @@ public class MainActivity extends Fragment
             }
         }
         for (int i = 0; i < links.size(); i++) {
-             link = links.get(i);
+            link = links.get(i);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
-            String afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
-            if (!linksPaging.get(i).isEmpty() ) afterQ = "&after=" + linksPaging.get(i);
+            String since = "&since=" + (cal.getTimeInMillis() / 1000);
+            String after = "";
+            if (!linksPaging.get(i).isEmpty()) after = "&after=" + linksPaging.get(i);
             final int linkIndex = i;
+
 
             // Change
             Log.d("eee",link+"  linksPagingsize  "+linksPaging.size());
+            Log.d("ddd",since);
             batch.add(new GraphRequest(token,
-                            link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + afterQ
-                    , null, HttpMethod.GET, new GraphRequest.Callback() {
-                @Override
-                public void onCompleted(GraphResponse response) {
+                            link + "/videos?fields=from{cover,name},source,id,picture,created_time,likes.limit(0).summary(true),description,title&limit=10" + since + after
+                            , null, HttpMethod.GET, new GraphRequest.Callback() {
 
-                    Video video;
-                    String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
-                    int index=0;
+                        @Override
+                        public void onCompleted(GraphResponse response) {
 
-                    try {
-                        JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
-                         pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
-                        for (int i = 1; i < response.getJSONObject().getJSONArray("data").length(); i++) {
-                            JSONObject js = response.getJSONObject().getJSONArray("data").getJSONObject(i);
-                            picture = (js.has("picture") && !js.isNull("picture")) ? js.getString("picture") : "";
-                            source = (js.has("source") && !js.isNull("source")) ? js.getString("source") : "";
-                            title = (js.has("title") && !js.isNull("title")) ? js.getString("title") : "";
-                            description = (js.has("description") && !js.isNull("description")) ? js.getString("description") : "";
-                            id = (js.has("id") && !js.isNull("id")) ? js.getString("id") : "";
-                            created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
-                            String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
-                            String page_pic_id = js.getJSONObject("from").getString("id");
-                            String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
-                            video = new Video(source, description, title, id, picture, created_time, likes, pageName, "false", page_pic);
-                            video.pos++;
-                            videos.add(video);
+                            Video video;
+                            String picture = "", source = "", title = "", description = "", id = "", created_time = "",pageName;
+                            int index=0;
+                            Log.d("ddd","getVideos");
+                            try {
+                                JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
+                                pageName = (jsPageName.has("name") && !jsPageName.isNull("name")) ? jsPageName.getString("name") : "";
+                                for (int i = 1; i < response.getJSONObject().getJSONArray("data").length(); i++) {
+                                    JSONObject js = response.getJSONObject().getJSONArray("data").getJSONObject(i);
+                                    picture = (js.has("picture") && !js.isNull("picture")) ? js.getString("picture") : "";
+                                    source = (js.has("source") && !js.isNull("source")) ? js.getString("source") : "";
+                                    title = (js.has("title") && !js.isNull("title")) ? js.getString("title") : "";
+                                    description = (js.has("description") && !js.isNull("description")) ? js.getString("description") : "";
+                                    id = (js.has("id") && !js.isNull("id")) ? js.getString("id") : "";
+                                    created_time = (js.has("created_time") && !js.isNull("created_time")) ? js.getString("created_time") : "";
+                                    String likes = js.getJSONObject("likes").getJSONObject("summary").getString("total_count");
+                                    String page_pic_id = js.getJSONObject("from").getString("id");
+                                    String page_pic = "https://graph.facebook.com/"+page_pic_id+"/picture?type=large";
+                                    created_time = created_time.substring(0,created_time.indexOf('+'));
+                                    Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(created_time);
+                                    video = new Video(source, description, title, id, picture, date, likes, pageName, "false", page_pic);
+                                    video.pos++;
+                                    Log.d("time",date.toString());
+                                    Log.d("zxc",video.getCreated_date() + "                  " +(++pos));
+                                    //videos.add(video);
+                                    items.add(video);
 
-                        }
-                        linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
-                        String idPic = jsPageName.getString("id");
+                                }
+                                linksPaging.set(linkIndex, response.getJSONObject().getJSONObject("paging").getJSONObject("cursors").getString("after"));
+                                String idPic = jsPageName.getString("id");
 
-                        pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
-                        pageCove= jsPageName.getJSONObject("cover").getString("source");
-                        Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
-                        Log.d("ccc",link +"  "+linkIndex+" "+pagePic+" "+pageCove);
-                        //pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
-                        //boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
+                                pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
+                                pageCove= jsPageName.getJSONObject("cover").getString("source");
+                                Log.d("asdnewpage", linksPaging.get(linkIndex) + "-" + linkIndex);
+                                Log.d("ccc",link +"  "+linkIndex+" "+pagePic+" "+pageCove);
+                                //pages.add(linkIndex,new Pages(link,"true",pagePic,pageCove,pageName));
+                                //boolean b=myDb.updateDataByID(idConnt+"","true",pagePic,pageCove,pageName);
 
-                        //myDb.deleteData_P(link,DatabaseHelper.TABLE_NAME);
-                        //myDb.insertData_Pages(link,"true",pagePic,pageCove,pageName_Orgin);
+                                //myDb.deleteData_P(link,DatabaseHelper.TABLE_NAME);
+                                //myDb.insertData_Pages(link,"true",pagePic,pageCove,pageName_Orgin);
                        /* res.moveToPosition(0);
                         while (res.moveToNext()) {
                             Log.d("ccc",idConnt+""+"  id = "+res.getString(0)+" page pic "+res.getString(3)
                                    + " page name "+res.getString(5));
                         }*/
-                        idConnt++;
-                        // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
+                                idConnt++;
+                                // String linkNext = response.getJSONObject().getJSONObject("paging").getString("next");
 
-                    } catch (Exception ex) {
-                        Log.d("ddd", ex.toString());
-                    }
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyDataSetChanged();
-                            progressBar.setVisibility(View.GONE);
-                            progressBarDown.setVisibility(View.GONE);
+                            } catch (Exception ex) {
+                                Log.d("ddd", ex.toString());
+                            }
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            });
+
                         }
-                    });
-
-                }
-            })
+                    })
 
             );
         }
         batch.addCallback(new GraphRequestBatch.Callback() {
             @Override
             public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                Log.d("vvvv",link);
-                /*ArrayList<Video> sortItems = new ArrayList<Video>();
-                sortItems.clear();
-                for(int i=pos;i<videos.size();i++)
-                    sortItems.add(videos.get(i));
-                Collections.sort(sortItems, new Comparator<Video>() {
+
+                Collections.sort(items, new Comparator<Video>() {
                     @Override
                     public int compare(Video video2, Video video1) {
                         return video1.getCreated_date().compareTo(video2.getCreated_date());
                     }
                 });
                 //
-                for (int i=pos,j=0;i<videos.size();i++,j++)
-                {
-                    Log.d("iiii",sortItems.get(j).getTitle());
-                    videos.set(i,sortItems.get(j));
-                }*/
-                //visibleVideos.addAll( videos);
+
+                videos.addAll(items);
 
                 if(lastSize == videos.size())
                     isFinished = true;
-                Log.d("fgh",isFinished+"");
+                Log.d("fghj",isFinished+"");
                 add10();
                 //add10();
 
@@ -446,41 +422,40 @@ public class MainActivity extends Fragment
         return super.onOptionsItemSelected(item);
     }
 
-        @SuppressWarnings("StatementWithEmptyBody")
-        @Override
-        public boolean onNavigationItemSelected (MenuItem item){
-            // Handle navigation view item clicks here.
-            int id = item.getItemId();
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected (MenuItem item){
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
 
-            DrawerLayout drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        }
+        DrawerLayout drawer = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
-       /* @Override
-        public void onDestroy ()
+    /* @Override
+     public void onDestroy ()
+     {
+         myDb.close();
+         super.onDestroy();
+
+     }
+
+     @Override
+     public void onStop ()
+     {
+         myDb.close();
+         super.onStop();
+     }*/
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser)
         {
-            myDb.close();
-            super.onDestroy();
-
+            Main2Activity.clearHistory.setVisibility(View.GONE);
+            Main2Activity.clearFavorite.setVisibility(View.GONE);
+            Main2Activity.addPage.setVisibility(View.GONE);
         }
-
-        @Override
-        public void onStop ()
-        {
-            myDb.close();
-            super.onStop();
-        }*/
-       @Override
-       public void setUserVisibleHint(boolean isVisibleToUser) {
-           super.setUserVisibleHint(isVisibleToUser);
-          if(isVisibleToUser)
-           {
-               Main2Activity.clearHistory.setVisibility(View.GONE);
-               Main2Activity.clearFavorite.setVisibility(View.GONE);
-               Main2Activity.addPage.setVisibility(View.GONE);
-           }
-       }
-
+    }
 }

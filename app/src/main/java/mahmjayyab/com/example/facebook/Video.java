@@ -1,5 +1,7 @@
 package mahmjayyab.com.example.facebook;
 
+import java.util.Date;
+
 /**
  * Created by mahmo on 7/4/2017.
  */
@@ -11,28 +13,27 @@ public class Video  {
     private String title = null;
     private String id = null;
     private String picture = null;
-    private String created_date = null;
+    private Date created_date = null;
     private String likes;
     private String favorite = "false";
     private String page_pic = null;
     private String image;
     public  int pos;
 
-   /* public Video(String source, String description, String title, String id, String picture,
-                 String created_date, String summary, String pageName){
+    public Video(String pageName, String source, String title, String picture){
         this.setSource(source);
-        this.setDescription(description);
+        //this.setDescription(description);
         this.setTitle(title);
-        this.setId(id);
+        //this.setId(id);
         this.setPicture(picture);
-        this.setCreated_date(created_date);
-        this.setLikes(summary);
+        //this.setCreated_date(created_date);
+        //this.setLikes(summary);
         this.setPageName(pageName);
 
-    }*/
+    }
 
     public Video(String source, String description, String title, String id, String picture,
-                 String created_date, String likes, String pageName, String favorite, String page_pic) {
+                 Date created_date, String likes, String pageName, String favorite, String page_pic) {
         this.setSource(source);
         this.setDescription(description);
         this.setTitle(title);
@@ -99,11 +100,11 @@ public class Video  {
         this.picture = picture;
     }
 
-    public String getCreated_date() {
+    public Date getCreated_date() {
         return created_date;
     }
 
-    public void setCreated_date(String created_date) {
+    public void setCreated_date(Date created_date) {
         this.created_date = created_date;
     }
 

@@ -95,7 +95,13 @@ public class AlertDFragment extends DialogFragment {
                                         }
 
                                     });
-
+                           /* request.setCallback(new GraphRequest.Callback() {
+                                @Override
+                                public void onCompleted(GraphResponse response) {
+                                    Log.d("callback","callback");
+                                    SupscripeActivity.ft.detach(SupscripeActivity.conttt).attach(SupscripeActivity.conttt).commit();
+                                }
+                            });*/
                             request.executeAsync();
 
                         }
