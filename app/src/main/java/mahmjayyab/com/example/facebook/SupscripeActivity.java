@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.facebook.GraphRequest;
@@ -36,15 +37,18 @@ public class SupscripeActivity extends Fragment {
     LinearLayoutManager mLayoutManager;
     static RecyclerView mRecyclerView;
     View rootView;
+    static FragmentTransaction ft;
+    static Fragment conttt;
     //FragmentManager fm;
     Context cont;
     static ProgressBar progressBar;
-
+    ImageButton deletePageBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.activity_main, container, false);
+        rootView = inflater.inflate(R.layout.activity_supscripe, container, false);
+        ft = getFragmentManager().beginTransaction();
         Log.d("ggg","Sup");
         cont = rootView.getContext();
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
@@ -97,7 +101,7 @@ public class SupscripeActivity extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         //Main2Activity.addPage.setVisibility(View.VISIBLE);
-
+        conttt = SupscripeActivity.this;
         return rootView;
     }
 
@@ -136,15 +140,14 @@ public class SupscripeActivity extends Fragment {
                     //HistoryActivity.clearHistory();
                     AlertDFragment alertdFragment = new AlertDFragment();
                     alertdFragment.show(Main2Activity.fm, "Alert Dialog Fragment");
+                   /*Fragment supscripeActivity=new SupscripeActivity();
+                    FragmentTransaction transaction=getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container,supscripeActivity); // give your fragment container id in first parameter
+                    transaction.addToBackStack(null);  // if written, this transaction will be added to backstack
+                    transaction.commit();*/
                 }
             });
         }
-    }
-
-    static void refreshPages(){
-        mRecyclerView.setAdapter(historyAdapter);
-
-
     }
 
 }

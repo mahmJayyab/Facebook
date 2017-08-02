@@ -231,7 +231,6 @@ public class Main2Activity extends AppCompatActivity {
                 case 1:
                     Log.d("ggg","1");
                     tab2 = new SupscripeActivity();
-
                     //addPage.setVisibility(View.VISIBLE);
                     //clearHistory.setVisibility(View.GONE);
                     //clearFavorite.setVisibility(View.GONE);

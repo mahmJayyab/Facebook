@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 
@@ -92,10 +93,16 @@ public class AlertDFragment extends DialogFragment {
                                                 Log.d("yyy", ex.toString());
                                             }
                                         }
+
                                     });
+
                             request.executeAsync();
+
                         }
+
+
                     }
+
                 })
                 // Negative Button
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

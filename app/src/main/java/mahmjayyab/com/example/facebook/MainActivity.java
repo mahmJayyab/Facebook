@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.facebook.AccessToken;
@@ -79,6 +81,8 @@ public class MainActivity extends Fragment
     int deletedItems = 0;
     public static LinkedList<Pages> subPages = new LinkedList<>();
     static boolean firstTime = true;
+    private boolean isUserScrolling = false;
+    private boolean isListGoingUp = true;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,6 +97,7 @@ public class MainActivity extends Fragment
 
         //creat cursor to read from database
          res = myDb.getAllData(DatabaseHelper.TABLE_NAME);
+
         if(res.getCount() == 0) {
             // show message
 
@@ -234,8 +239,54 @@ public class MainActivity extends Fragment
                     }
                     lastVisibleItemIndex = lastVisibleItem;
                 }
+                if(isUserScrolling){
+                    if(dy > 0){
+                        //means user finger is moving up but the list is going down
+                        isListGoingUp = false;
+                    }
+                    else{
+                        //means user finger is moving down but the list is going up
+                        isListGoingUp = true;
+                    }
+                }
+                //Log.d("asdasd",mLayoutManager.findLastCompletelyVisibleItemPosition()+"  "+"VisibleItemPosition");
+                //Log.d("asdasd",lastVisibleItemIndex+"  "+"lastVisibleItemIndex");
+             }
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //detect is the topmost item visible and is user scrolling? if true then only execute
+                if(newState ==  RecyclerView.SCROLL_STATE_DRAGGING){
+                    isUserScrolling = true;
+                    if(isListGoingUp){
+                        Log.d("asdasd","up");
+                        //my recycler view is actually inverted so I have to write this condition instead
+                        if(mLayoutManager.findLastCompletelyVisibleItemPosition() + 1 == 1){
+                            Log.d("asdasd","upIn");
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(isListGoingUp) {
+                                        if (mLayoutManager.findLastCompletelyVisibleItemPosition() + 1 == 1) {
+                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                            ft.detach(MainActivity.this).attach(MainActivity.this).commit();
+                                            Log.d("asdasd","upInIn");
+                                            Toast.makeText(getContext(),"exeute something", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                }
+                            },50);
+                            //waiting for 50ms because when scrolling down from top, the variable isListGoingUp is still true until the onScrolled method is executed
+                        }
+                    }
+                }
             }
         });
+
+
+
     }
 
     int pos = 0;

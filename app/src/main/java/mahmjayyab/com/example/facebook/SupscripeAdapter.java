@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.util.Log;
@@ -27,8 +28,6 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
     List<Pages> pages;
     Context mContext;
     public static String id;
-    ImageButton deletePageBtn;
-    LinearLayout pageCard;
 
 
     public SupscripeAdapter(List<Pages> Pages, Context mContext) {
@@ -44,8 +43,8 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.page_item, parent, false);
         //view.setId(R.id.videoView);
-        deletePageBtn = (ImageButton)view.findViewById(R.id.deletePageBtn);
-        pageCard = (LinearLayout)view.findViewById(R.id.pageCard);
+
+
         return new ViewHolder(view);
     }
 
@@ -54,7 +53,7 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-         final Pages page = pages.get(position);
+          final Pages page = pages.get(position);
         //Log.d("ccc",page.getPagePic());
         Log.d("ccc",page.getPageName() +"  "+position);
         holder.mpageNameTextView.setText(page.getPageName());
@@ -71,18 +70,18 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
            // holder.supscripeBtn.setBackgroundColor(Color.rgb(84,108,202));
         }
 
-
         Picasso.with(mContext).load(page.getPagePic()).into(holder.pagePic);
         Picasso.with(mContext).load(page.getPageCover()).into(holder.pageCover);
-
-        deletePageBtn.setOnClickListener(new View.OnClickListener() {
+        //here
+        holder.deletePageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 page.setIsSupscripe("false");
-                pageCard.setVisibility(View.GONE);
+               // holder.pageCard.setVisibility(View.GONE);
                 MainActivity.myDb.deleteData_P(page.getPageName(),DatabaseHelper.TABLE_NAME);
-                SupscripeActivity.refreshPages();
-
+                SupscripeActivity.mRecyclerView.setAdapter(SupscripeActivity.historyAdapter);
+                SupscripeActivity.ft.detach(SupscripeActivity.conttt).attach(SupscripeActivity.conttt).commit();
+               // holder.pageCard.setVisibility(View.GONE);
             }
         });
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +131,8 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         public ImageView pagePic;
         public ImageView pageCover;
         public View view;
-
+        public ImageButton deletePageBtn;
+        public LinearLayout pageCard;
 
         public ViewHolder(View v) {
             super(v);
@@ -142,6 +142,8 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
             supscripeBtn = (Button) v.findViewById(R.id.supscripe);
             pagePic = (ImageView) v.findViewById(R.id.pagePic);
             pageCover = (ImageView) v.findViewById(R.id.pageCover);
+            pageCard = (LinearLayout)view.findViewById(R.id.pageCard);
+            deletePageBtn = (ImageButton)view.findViewById(R.id.deletePageBtn);
 
 
             holders.add(this);
@@ -149,10 +151,5 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
         }
 
     }
-    void checkSupscribe(){
-
-    }
-
-
 
 }
