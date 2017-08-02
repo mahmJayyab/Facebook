@@ -84,12 +84,12 @@ public class SupscripeAdapter extends RecyclerView.Adapter<SupscripeAdapter.View
                // holder.pageCard.setVisibility(View.GONE);
             }
         });
-        holder.view.setOnClickListener(new View.OnClickListener() {
+       /* holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
         holder.supscripeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

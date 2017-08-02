@@ -69,6 +69,7 @@ public class MainActivity extends Fragment
     int lastIndex = 1;
     RecyclerView mRecyclerView;
     ProgressBar progressBar;
+    ProgressBar progressBar2;
     Context cont;
     View rootView;
     int idConnt = 1;
@@ -165,6 +166,7 @@ public class MainActivity extends Fragment
     boolean isFinished;
 
     public void add10() {
+        progressBar2.setVisibility(View.GONE);
         int max = Math.min(lastIndex + 9, videos.size());
         Log.d("tttt", lastIndex + "::" + videos.size() +"::" + max);
         Log.d("asd", "ADD VIDEO INDEX " + lastIndex + ":" + max);
@@ -180,8 +182,8 @@ public class MainActivity extends Fragment
         if(lastIndex == videos.size() && !isEntered && !isFinished)
         {
             Log.d("tttt","EQ");
-
             getVideos();
+            progressBar2.setVisibility(View.VISIBLE);
         }
         lastSize = videos.size();
     }
@@ -192,6 +194,7 @@ public class MainActivity extends Fragment
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        progressBar2 = (ProgressBar) rootView.findViewById(R.id.progressBar2);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -247,8 +250,8 @@ public class MainActivity extends Fragment
                                 public void run() {
                                     if(isListGoingUp) {
                                         if (mLayoutManager.findLastCompletelyVisibleItemPosition() + 1 == 1) {
-                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                            ft.detach(MainActivity.this).attach(MainActivity.this).commit();
+                                            //FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                            //ft.detach(MainActivity.this).attach(MainActivity.this).commit();
                                             Log.d("asdasd","upInIn");
                                             Toast.makeText(getContext(),"exeute something", Toast.LENGTH_SHORT).show();
 
