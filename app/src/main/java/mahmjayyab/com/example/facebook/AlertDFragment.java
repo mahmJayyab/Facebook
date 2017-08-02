@@ -51,7 +51,8 @@ public class AlertDFragment extends DialogFragment {
                              b = true;
                             Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
                             while (res.moveToNext()) {
-                                String pageName = res.getString(1);
+                                String pageName = res.getString(5);
+                                Log.d("vvb",pageName + "       " + temp);
                                 if(pageName.equals(temp) ){
                                     b=false;
                                     Log.d("ccc","false");
@@ -62,7 +63,7 @@ public class AlertDFragment extends DialogFragment {
                             Calendar cal = Calendar.getInstance();
                             afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
                             GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}&since=2017-05-01",
+                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
@@ -82,6 +83,7 @@ public class AlertDFragment extends DialogFragment {
                                                     }
                                                     else{
                                                         MainActivity.myDb.updateData(pageName,"true");
+                                                        Log.d("exex","true");
                                                     }
 
                                                 } else{

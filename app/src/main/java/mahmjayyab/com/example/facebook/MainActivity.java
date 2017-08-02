@@ -220,7 +220,7 @@ public class MainActivity extends Fragment
                     }
                     lastVisibleItemIndex = lastVisibleItem;
                 }
-                if(isUserScrolling){
+                /*if(isUserScrolling){
                     if(dy > 0){
                         //means user finger is moving up but the list is going down
                         isListGoingUp = false;
@@ -262,10 +262,11 @@ public class MainActivity extends Fragment
                             //waiting for 50ms because when scrolling down from top, the variable isListGoingUp is still true until the onScrolled method is executed
                         }
                     }
-                }
+                }*/
             }
         });
     }
+
 
     int pos = 0;
     public void getVideos() {
