@@ -26,6 +26,7 @@ public class AlertDFragment extends DialogFragment {
     public static  String pageName;
     boolean b = true;
     String afterQ;
+    GraphRequest request;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final EditText input = new EditText(getActivity());
@@ -48,10 +49,11 @@ public class AlertDFragment extends DialogFragment {
                             } else {
                                 temp = p;
                             }
+                            temp = temp.toLowerCase();
                              b = true;
                             Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
                             while (res.moveToNext()) {
-                                String pageName = res.getString(1);
+                                String pageName = res.getString(5);
                                 if(pageName.equals(temp) ){
                                     b=false;
                                     Log.d("ccc","false");
@@ -61,7 +63,7 @@ public class AlertDFragment extends DialogFragment {
                            pageName = temp;
                             Calendar cal = Calendar.getInstance();
                             afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
-                            GraphRequest request = GraphRequest.newGraphPathRequest(
+                             request = GraphRequest.newGraphPathRequest(
                                     MainActivity.token, pageName+"/videos?fields=from{cover,name}&since=2017-05-01",
                                     new GraphRequest.Callback() {
                                         @Override
@@ -79,13 +81,16 @@ public class AlertDFragment extends DialogFragment {
                                                         String name = jsPageName.getString("name");
                                                         String pagePic = "https://graph.facebook.com/"+idPic+"/picture?type=large";
                                                         MainActivity.myDb.insertData_Pages(name, "true",pagePic,cover,pageName);
+                                                        SupscripeActivity.intsertMsg("Added!");
                                                     }
                                                     else{
                                                         MainActivity.myDb.updateData(pageName,"true");
+                                                        SupscripeActivity.intsertMsg("Existing page!");
                                                     }
 
                                                 } else{
                                                     Log.d("yyy","Error Page");
+                                                    //SupscripeActivity.intsertMsg("Wrong page!");
                                                 }
 
 
@@ -93,11 +98,19 @@ public class AlertDFragment extends DialogFragment {
                                                 Log.d("yyy", ex.toString());
                                             }
                                             SupscripeActivity.ft.detach(SupscripeActivity.conttt).attach(SupscripeActivity.conttt).commit();
+
                                         }
+
 
                                     });
 
+
                             request.executeAsync();
+                            if(request.getGraphObject() == null ){
+                                SupscripeActivity.intsertMsg("Wrong page!");
+
+                            }
+
 
                         }
 

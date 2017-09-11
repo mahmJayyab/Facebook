@@ -70,7 +70,7 @@ public class VideoPlayer extends AppCompatActivity {
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 Log.d("test", "gog");
-                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+                relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,ViewGroup.LayoutParams.FILL_PARENT));
                 exitFullScreen.setVisibility(View.VISIBLE);
                 fullScreen.setVisibility(View.GONE);
                 //videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -135,7 +135,7 @@ public class VideoPlayer extends AppCompatActivity {
             // videoview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
             Toast.makeText(this, "full screen", Toast.LENGTH_SHORT).show();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height/3 ));
+            relativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height/3));
             exitFullScreen.setVisibility(View.GONE);
             fullScreen.setVisibility(View.VISIBLE);
            // Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();

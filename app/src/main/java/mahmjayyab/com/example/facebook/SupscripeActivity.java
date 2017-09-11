@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -40,7 +41,7 @@ public class SupscripeActivity extends Fragment {
     static FragmentTransaction ft;
     static Fragment conttt;
     //FragmentManager fm;
-    Context cont;
+    static Context cont;
     static ProgressBar progressBar;
     ImageButton deletePageBtn;
 
@@ -148,6 +149,9 @@ public class SupscripeActivity extends Fragment {
                 }
             });
         }
+    }
+    static void intsertMsg(String s){
+        Toast.makeText(cont,s, Toast.LENGTH_SHORT).show();
     }
 
 }

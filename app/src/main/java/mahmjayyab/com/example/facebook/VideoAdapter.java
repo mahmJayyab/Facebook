@@ -31,6 +31,11 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     List<Video> videos;
     Context mContext;
     int index = 0;
+    int hourI;
+    String hourS;
+    int mintI;
+    String mintS;
+    String timezone;
     boolean firstTime;
 
    // public static LinkedList<Video> hv = new LinkedList<>();
@@ -56,11 +61,21 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Video video = videos.get(position);
         holder.mTitleTextView.setText(video.getTitle());
+        if(video.getCreated_date().getHours() >12) {
+            hourI = video.getCreated_date().getHours()-12;
+            timezone = "PM";
+        }else  timezone = "AM";
+        if(hourI<10)hourS = "0"+hourI;
+        else hourS = ""+hourI;
+        mintI = video.getCreated_date().getMinutes();
+        if(mintI < 10)mintS = "0"+ mintI ;
+        else mintS = ""+mintI;
+        holder.date.setText(video.getCreated_date().getDay()+"/"+video.getCreated_date().getMonth()+"/"+(video.getCreated_date().getYear()+1900+"  "+hourS+":"+mintS+" "+timezone));
+        holder.time.setVisibility(View.GONE);
         holder.mDescriptionTextView.setText(video.getDescription());
         Picasso.with(mContext).load(video.getPicture()).into(holder.imageView);
         final MediaController mediaController = new MediaController(mContext);
         holder.videoView.setVideoPath(video.getSource());
-
         holder.videoView.setMediaController(mediaController);
         mediaController.setAnchorView(holder.videoView);
 
@@ -106,6 +121,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         public VideoView videoView;
         public TextView mpageNameTextView;
         public ImageView pagePic;
+        public TextView date;
+        public TextView time;
 
         public ProgressBar progressBar;
         //public ImageButton imageButton;
@@ -115,6 +132,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             view = v;
             spec = 1;
             mTitleTextView = (TextView) v.findViewById(R.id.title);
+            date = (TextView)  v.findViewById(R.id.date);
+            time = (TextView) v.findViewById(R.id.time);
             mDescriptionTextView = (TextView) v.findViewById(R.id.description);
             imageView = (ImageView) v.findViewById(R.id.imageView);
             videoView = (VideoView) v.findViewById(R.id.videoView);

@@ -63,15 +63,13 @@
                 android:layout_width="43dp"
                 android:layout_height="43dp"
                 android:layout_columnSpan="3"
-                android:layout_gravity="right"
                 android:background="@null"
                 android:visibility="visible"
                 app:srcCompat="@drawable/ic_photo_size_select_small_black_24dp"
                 tools:layout_editor_absoluteX="-112dp"
                 tools:layout_editor_absoluteY="37dp"
                 android:layout_below="@+id/notfull_button"
-                android:layout_toEndOf="@+id/full_button"
-                android:layout_marginStart="17dp" />
+                android:layout_toEndOf="@+id/full_button" />
 
             <ImageButton
                 android:id="@+id/full_button"
