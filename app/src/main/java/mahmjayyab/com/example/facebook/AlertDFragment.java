@@ -21,9 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class AlertDFragment extends DialogFragment {
     public static  String pageName;
+    GraphRequest request;
     boolean b = true;
     String afterQ;
     @Override
@@ -48,29 +52,29 @@ public class AlertDFragment extends DialogFragment {
                             } else {
                                 temp = p;
                             }
+                            temp = temp.toLowerCase();
                              b = true;
-                            Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
+                            final Cursor res = MainActivity.myDb.getAllData(DatabaseHelper.TABLE_NAME);
                             while (res.moveToNext()) {
                                 String pageName = res.getString(5);
-                                Log.d("vvb",pageName + "       " + temp);
                                 if(pageName.equals(temp) ){
                                     b=false;
                                     Log.d("ccc","false");
                                 }
                             }
-                            Log.d("yyy",temp);
+
                            pageName = temp;
                             Calendar cal = Calendar.getInstance();
                             afterQ = "&since=" + (cal.getTimeInMillis() / 1000);
-                            GraphRequest request = GraphRequest.newGraphPathRequest(
-                                    MainActivity.token, pageName+"/videos?fields=from{cover,name}",
+                             request = GraphRequest.newGraphPathRequest(
+                                    MainActivity.token, pageName+"/videos",
                                     new GraphRequest.Callback() {
                                         @Override
                                         public void onCompleted(GraphResponse response) {
                                             try {
+                                                Log.d("ffd","asdasdasd");
                                                 JSONObject jsPageName =  response.getJSONObject().getJSONArray("data").getJSONObject(0).getJSONObject("from");
-                                                String ms = "Please reduce the amount of data you're asking for, then retry your request";
-                                                Log.d("yyy",jsPageName+"   ");
+
                                                 if( jsPageName.has("name")|| !jsPageName.getJSONArray("data").isNull(0)  ){
                                                     if(b) {
                                                         MainActivity.allPages.add(pageName);
@@ -97,12 +101,15 @@ public class AlertDFragment extends DialogFragment {
                                             SupscripeActivity.ft.detach(SupscripeActivity.conttt).attach(SupscripeActivity.conttt).commit();
                                         }
 
+
                                     });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields","from{cover,name}");
+                            request.setParameters(parameters);
+                            Log.d("ffd",request.executeAsync()+"");
 
-                            request.executeAsync();
-
+                            Log.d("ffd",request.getGraphObject()+"");
                         }
-
 
                     }
 

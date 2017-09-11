@@ -84,6 +84,8 @@ public class MainActivity extends Fragment
     private boolean isUserScrolling = false;
     private boolean isListGoingUp = true;
     public static LinkedList<Pages> subPages = new LinkedList<>();
+    static ArrayList<String> news = new ArrayList<>();
+    static ArrayList<String> sports = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,9 +102,10 @@ public class MainActivity extends Fragment
 
         if(res.getCount() == 0) {
             // show message
-
-            allPages.add("MEQBAS");
-            allPages.add("ajplusarabi");
+            news.add("MEQBAS");news.add("ajplusarabi");
+            sports.add("ajplusarabi");
+            //allPages.add("MEQBAS");
+            //allPages.add("ajplusarabi");
             isSupscripe.add(true);
             isSupscripe.add(true);
             links.add("MEQBAS");
