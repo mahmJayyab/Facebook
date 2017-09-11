@@ -84,6 +84,8 @@ public class MainActivity extends Fragment
     private boolean isUserScrolling = false;
     private boolean isListGoingUp = true;
     public static LinkedList<Pages> subPages = new LinkedList<>();
+    static ArrayList<String> news = new ArrayList<>();
+    static ArrayList<String> sports = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,9 +102,10 @@ public class MainActivity extends Fragment
 
         if(res.getCount() == 0) {
             // show message
-
-            allPages.add("MEQBAS");
-            allPages.add("ajplusarabi");
+            news.add("MEQBAS");news.add("ajplusarabi");
+            sports.add("ajplusarabi");
+            //allPages.add("MEQBAS");
+            //allPages.add("ajplusarabi");
             isSupscripe.add(true);
             isSupscripe.add(true);
             links.add("MEQBAS");
@@ -220,7 +223,7 @@ public class MainActivity extends Fragment
                     }
                     lastVisibleItemIndex = lastVisibleItem;
                 }
-                if(isUserScrolling){
+                /*if(isUserScrolling){
                     if(dy > 0){
                         //means user finger is moving up but the list is going down
                         isListGoingUp = false;
@@ -262,10 +265,11 @@ public class MainActivity extends Fragment
                             //waiting for 50ms because when scrolling down from top, the variable isListGoingUp is still true until the onScrolled method is executed
                         }
                     }
-                }
+                }*/
             }
         });
     }
+
 
     int pos = 0;
     public void getVideos() {

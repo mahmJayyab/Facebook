@@ -190,11 +190,11 @@ public class Main2Activity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
-
-
             Log.d("haha","referch");
             //tab1 = new MainActivity();
+            DialogSettings settings = new DialogSettings();
+            settings.setRetainInstance(true);
+            settings.show(fm,"Menu");
 
             return true;
         }
