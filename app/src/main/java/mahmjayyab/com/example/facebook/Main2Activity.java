@@ -192,9 +192,12 @@ public class Main2Activity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Log.d("haha","referch");
             //tab1 = new MainActivity();
-            DialogSettings settings = new DialogSettings();
+            /*DialogSettings settings = new DialogSettings();
             settings.setRetainInstance(true);
-            settings.show(fm,"Menu");
+            settings.show(fm,"Menu");*/
+            Intent myIntent = new Intent(this, StartPages.class);
+
+            this.startActivity(myIntent);
 
             return true;
         }

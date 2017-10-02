@@ -34,11 +34,19 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
         }
         for (int i =0;i<size;i++) checkedItems[i] = MainActivity.isSupscripe.get(i);
         //MainActivity.checked.toArray(checkedItems);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.start_menu, null);
         builder
                 .setView(view)
                 .setTitle("Channels")
+                .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        //Log.d("asd",isChecked+"        "+which);
+                        // MainActivity.checked.set(which,isChecked);
+
+                    }
+                })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     for(int i =0; i< checkedItems.length; i++){
@@ -59,15 +67,8 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
 
                     }
                 })
+                ;
 
-                .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        //Log.d("asd",isChecked+"        "+which);
-                       // MainActivity.checked.set(which,isChecked);
-
-                    }
-                });
 
         Spinner sp = (Spinner)view.findViewById(R.id.spin);
         final List<String> categories = new ArrayList<>();
@@ -83,18 +84,22 @@ public class DialogSettings extends android.support.v4.app.DialogFragment {
             public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
             {
                 Log.d("sele",categories.get(position));
-                switch (categories.get(position)){
+                /*switch (categories.get(position)){
                     case "News":
                     {
                         items[0] = "MEQBAS";
                         items[1] = "ajplusarabi";
+                        Log.d("ffdd",items[1]);
+
                         break;
                     }
                     case "Sports":
-                        items[0] = "ajplusarabi";
+                        items[0] = "MEQBAS";
                         items[1]="";
+                        Log.d("ffdd",items[0]);
+
                         break;
-                }
+                }*/
             }
 
             public void onNothingSelected(AdapterView<?> arg0)

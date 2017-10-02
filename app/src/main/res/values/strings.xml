@@ -9,4 +9,5 @@
     <string name="title_FaceTube">FaceTube</string>
     <string name="action_settings">Settings</string>
     <string name="prompt">Select Category</string>
+    <string name="title_activity_start_pages">StartPages</string>
 </resources>
